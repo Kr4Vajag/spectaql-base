@@ -71,9 +71,10 @@ module.exports = ({
         }
     })
 
+    let sortAlphabetically = allOptions.spectaql?.sortAlphabetically ?? false;
+
     const queryType = introspectionManipulator.getQueryType()
     const mutationType = introspectionManipulator.getMutationType()
-
     const queryItems = queryType.fields.map((query) => {
         const customDepth = fieldExpansionDepthConfig.queries[query.name]
         return addCustomFieldExpansionDepthData({...query, isQuery: true}, customDepth)
@@ -97,6 +98,18 @@ module.exports = ({
     const scalarTypes = otherTypes.filter(type => type.kind === 'SCALAR')
 
     const directives = introspectionResponse.__schema.directives
+
+    if (sortAlphabetically) {
+        queryItems.sort((a, b) => a.name.localeCompare(b.name));
+        mutationItems.sort((a, b) => a.name.localeCompare(b.name));
+        objectTypes.sort((a, b) => a.name.localeCompare(b.name));
+        inputObjectTypes.sort((a, b) => a.name.localeCompare(b.name));
+        interfaceTypes.sort((a, b) => a.name.localeCompare(b.name));
+        enumTypes.sort((a, b) => a.name.localeCompare(b.name));
+        unionTypes.sort((a, b) => a.name.localeCompare(b.name));
+        scalarTypes.sort((a, b) => a.name.localeCompare(b.name));
+        directives.sort((a, b) => a.name.localeCompare(b.name));
+    }
 
     const originalIntrospection = allOptions.introspection || {}
     let currentProcessingItem = null
