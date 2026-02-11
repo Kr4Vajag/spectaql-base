@@ -241,14 +241,14 @@ html {
     }
   }
 
-  h5 {
+  h5:not(.field-arguments-heading) {
     margin-bottom: 6px;
     font-weight: 600;
     font-size: $font-size-h5;
     line-height: $line-height-heading;
   }
 
-  h6 {
+  h6:not(.field-argument-name) {
     margin-block: 1.5em 4px;
     text-transform: uppercase;
     font-size: $font-size-h6;
