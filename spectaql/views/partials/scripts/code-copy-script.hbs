@@ -1,0 +1,61 @@
+<template id="code-copy-button-template">
+    <button class="code-copy" type="button" title="Copy to clipboard">
+      <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
+      <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    </button>
+</template>
+
+<script>
+(function() {
+    var buttonTemplate = document.getElementById('code-copy-button-template');
+
+    document.querySelectorAll('pre > code').forEach(function (element) {
+        var buttonClone = buttonTemplate.content.cloneNode(true);
+        element.parentElement.appendChild(buttonClone);
+    });
+
+    function copyToClipboard(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+            return navigator.clipboard.writeText(text);
+        }
+
+        var textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        return new Promise(function(resolve, reject) {
+            if (document.execCommand('copy')) {
+                resolve();
+            } else {
+                reject(new Error('execCommand copy failed'));
+            }
+            textArea.remove();
+        });
+    }
+
+    function showCopySuccess(button) {
+        button.classList.add('copied');
+
+        setTimeout(function() {
+            button.classList.remove('copied');
+        }, 2000);
+    }
+
+    document.querySelectorAll('.code-copy').forEach(function (button) {
+        button.addEventListener('click', function() {
+            var parentElement = button.parentElement;
+            var codeElement = parentElement.querySelector('code');
+            var textToCopy = codeElement.textContent;
+
+            copyToClipboard(textToCopy).then(function () {
+                showCopySuccess(button);
+            });
+        });
+    });
+})();
+</script>

@@ -1,0 +1,123 @@
+<script>
+    /**
+     * Fix excessive indentation in code blocks which have blank line.
+     */
+    (function () {
+        function fixCodeBlockIndentation() {
+            document.querySelectorAll('pre > code').forEach(function (codeElement) {
+                var textContent = codeElement.textContent;
+                var lines = textContent.split('\n');
+
+                if (lines.length <= 1) return;
+
+                // Find indentation for all non-empty lines
+                var indentedLines = [];
+                for (var i = 0; i < lines.length; i++) {
+                    if (lines[i].trim().length > 0) {
+                        indentedLines.push({index: i, indent: getIndentCount(lines[i])});
+                    }
+                }
+
+                if (indentedLines.length === 0) return;
+
+                var firstLineIndent = indentedLines[0].indent;
+                var subsequentIndents = indentedLines.slice(1).map(function (indentedLine) {
+                    return indentedLine.indent;
+                });
+                var minSubsequentIndent = subsequentIndents.length > 0 ? Math.min.apply(null, subsequentIndents) : 0;
+
+                // First line has significantly less indentation than subsequent lines
+                if (subsequentIndents.length > 0 && (minSubsequentIndent - firstLineIndent) >= 8) {
+                    processTextNodes(codeElement, minSubsequentIndent);
+                }
+            });
+        }
+
+        function getIndentCount(textLine) {
+            var count = 0;
+
+            for (var i = 0; i < textLine.length; i++) {
+                if (textLine[i] === ' ') count++;
+                else if (textLine[i] === '\t') count += 4;
+                else break;
+            }
+
+            return count;
+        }
+
+        function processTextNodes(element, indentToRemove) {
+            var treeWalker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null, false);
+
+            var textNodes = [];
+            while (treeWalker.nextNode()) {
+                textNodes.push(treeWalker.currentNode);
+            }
+
+            textNodes.forEach(function (node) {
+                var text = node.nodeValue;
+                if (text === null) return;
+
+                if (text.indexOf('\n') === -1) {
+                    // No newlines - leave as-is (part of line content)
+                    return;
+                }
+
+                var parts = text.split('\n');
+                var newParts = [];
+
+                for (var i = 0; i < parts.length; i++) {
+                    var part = parts[i];
+
+                    if (i === 0) {
+                        newParts.push(part);
+                        continue;
+                    }
+
+                    // Parts after newlines (i > 0) start a new line
+                    // Remove leading indentation
+                    newParts.push(removeIndentFromString(part, indentToRemove));
+                }
+
+                node.nodeValue = newParts.join('\n');
+            });
+        }
+
+        function removeIndentFromString(textLine, indentToRemove) {
+            var removed = 0;
+            var charIndex = 0;
+
+            while (removed < indentToRemove && charIndex < textLine.length) {
+                if (textLine[charIndex] === ' ') {
+                    removed++;
+                    charIndex++;
+                } else if (textLine[charIndex] === '\t') {
+                    removed += 4;
+                    charIndex++;
+                } else {
+                    break;
+                }
+            }
+
+            return textLine.substring(charIndex);
+        }
+
+        /**
+         * Re-highlight all GraphQL code blocks using highlight.js
+         */
+        function fixGraphqlCodeBlocksHighlighting() {
+            var codeElements = document.querySelectorAll('pre > code.language-graphql');
+
+            if (codeElements.length === 0 || typeof hljs === 'undefined') return;
+
+            codeElements.forEach(function (codeElement) {
+                var plainText = codeElement.textContent;
+                codeElement.textContent = plainText;
+                codeElement.classList.remove('hljs');
+                hljs.highlightElement(codeElement);
+            });
+        }
+
+        fixCodeBlockIndentation();
+        fixGraphqlCodeBlocksHighlighting();
+    })();
+</script>

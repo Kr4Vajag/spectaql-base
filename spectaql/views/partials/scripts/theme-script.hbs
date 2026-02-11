@@ -1,0 +1,68 @@
+<script>
+(function() {
+    const THEME_DARK = 'dark';
+    const THEME_LIGHT = 'light';
+    const THEME_COOKIE_NAME = 'spectaql-theme';
+    const THEME_COOKIE_EXPIRY_DAYS = 365;
+
+    function initializeTheme() {
+        let savedTheme = getThemeCookieValue();
+
+        if (savedTheme !== null) {
+            applyTheme(savedTheme);
+        }
+    }
+
+    function getThemeCookieValue() {
+        let cookieName = THEME_COOKIE_NAME + '=';
+        let cookieArray = document.cookie.split(';');
+
+        for (let index = 0; index < cookieArray.length; index++) {
+            let cookie = cookieArray[index].trim();
+
+            if (cookie.startsWith(cookieName)) {
+                return cookie.substring(cookieName.length);
+            }
+        }
+
+        return null;
+    }
+
+    function applyTheme(theme) {
+        document.body.classList.remove('spectaql-dark', 'spectaql-light');
+
+        if (theme === THEME_LIGHT) {
+            document.body.classList.add('spectaql-light');
+        } else {
+            document.body.classList.add('spectaql-dark');
+        }
+    }
+
+    function toggleTheme() {
+        let currentTheme = getCurrentTheme();
+        let newTheme = currentTheme === THEME_DARK ? THEME_LIGHT : THEME_DARK;
+        applyTheme(newTheme);
+        setThemeCookieValue(newTheme);
+    }
+
+    function getCurrentTheme() {
+        if (document.body.classList.contains('spectaql-light')) {
+            return THEME_LIGHT;
+        }
+
+        return THEME_DARK;
+    }
+
+    function setThemeCookieValue(value) {
+        let expiryDate = new Date();
+        expiryDate.setTime(expiryDate.getTime() + (THEME_COOKIE_EXPIRY_DAYS * 24 * 60 * 60 * 1000));
+        let expires = ';expires=' + expiryDate.toUTCString();
+        document.cookie = THEME_COOKIE_NAME + '=' + value + expires + ';path=/graphql/docs';
+    }
+
+    initializeTheme();
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+    });
+})();
+</script>

@@ -1,0 +1,27 @@
+{{! DO THE CONTENT }}
+<article id="content">
+  <div class="doc-heading-container">
+    <h1 class="doc-heading">{{info.title}}</h1>
+    {{>layout/theme-toggle}}
+  </div>
+
+  {{! Check if there is effectively nothing to do }}
+  {{#unless (or info.x-hideIntroduction (and info.x-hideWelcome (or info.x-hideIntroItems (empty info.x-introItems))))}}
+    {{>layout/content/introduction/main}}
+  {{/unless}}
+
+  {{! DO THE CONTENT }}
+  {{#if (nempty items)}}
+    {{#each items}}
+      {{>layout/content/item}}
+    {{/each}}
+  {{/if}}
+
+  {{#unless (or info.x-hideOutroItems (empty info.x-outroItems))}}
+    <div id="outro" data-traverse-target="outro">
+      {{#each info.x-outroItems }}
+        {{>layout/content/outro/item parentIndex=@index}}
+      {{/each}}
+    </div>
+  {{/unless}}
+</article>

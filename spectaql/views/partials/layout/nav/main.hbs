@@ -1,0 +1,42 @@
+<nav id="nav" role="navigation">
+    <div class="nav-group">
+        <ul class="nav-group-items">
+            <li><a href="#introduction">Introduction</a></li>
+            {{#unless (or info.x-hideIntroItems (empty info.x-introItems)) }}
+                {{#each info.x-introItems }}
+                    {{#unless items}}
+                        {{>layout/nav/intro-item parentIndex=@index}}
+                    {{/unless}}
+                {{/each}}
+            {{/unless}}
+        </ul>
+    </div>
+    {{#unless (or info.x-hideIntroItems (empty info.x-introItems)) }}
+        {{#each info.x-introItems }}
+            {{#if items}}
+                {{>layout/nav/intro-item parentIndex=@index}}
+            {{/if}}
+        {{/each}}
+    {{/unless}}
+    {{#if (nempty items)}}
+        {{#each items}}
+            {{>layout/nav/item headingNumber=4}}
+        {{/each}}
+    {{/if}}
+    {{#unless (or info.x-hideOutroItems (empty info.x-outroItems))}}
+        {{#each info.x-outroItems }}
+            {{#if items}}
+                {{>layout/nav/outro-item parentIndex=@index}}
+            {{/if}}
+        {{/each}}
+        <div class="nav-group">
+            <ul class="nav-group-items">
+                {{#each info.x-outroItems }}
+                    {{#unless items}}
+                        {{>layout/nav/outro-item parentIndex=@index}}
+                    {{/unless}}
+                {{/each}}
+            </ul>
+        </div>
+    {{/unless}}
+</nav>

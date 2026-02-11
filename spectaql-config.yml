@@ -1,0 +1,85 @@
+spectaql:
+  targetDir: ./frontend/web/spectaql
+  faviconUrl: /favicon.ico
+  themeDir: ./spectaql
+  additionalImages:
+    - ./frontend/web/svg/logo_black.svg
+  displayAllServers: true
+  oneFile: true
+
+introspection:
+  schemaFile: ./frontend/Components/GraphQL/public.graphql
+  dynamicExamplesProcessingModule: ./spectaql/dynamicExamples.js
+  queryNameStrategy: capitalizeFirst
+
+  # Default fieldExpansionDepth for all queries/mutations.
+  # For custom per-query/mutation values, edit spectaql/fieldExpansionDepthConfig.js
+  # The custom depth logic is handled by the theme's data/index.js.
+  fieldExpansionDepth: 3
+
+spectaqlDirective:
+  enable: true
+
+extensions:
+  graphqlScalarExamples: true
+
+servers:
+  - url: https://www.3rpms.de/graphql
+    description: Production server
+
+  - url: https://demo.3rpms.de/graphql
+    description: Sandbox server
+
+info:
+  title: 3RPMS General API Integration Knowledge Base
+  description: |
+    Welcome to the 3RPMS GraphQL API documentation. This API allows you to interact with the 3RPMS Property Management System.
+  
+    3RPMS GraphQL API is based on GraphQL. Visit https://graphql.org/ to learn more about the protocol.
+
+  x-introItems:
+    - title: Overview
+      file: spectaql/documentation/overview.md
+
+    - title: Changelog
+      file: spectaql/documentation/changelog.md
+
+    - title: GraphQL API
+      items:
+        - title: Why GraphQL?
+          file: spectaql/documentation/graphql-api/why_graphql.md
+
+        - title: Rate Limiting
+          file: spectaql/documentation/graphql-api/rate_limiting.md
+
+        - title: Filters
+          file: spectaql/documentation/graphql-api/filters.md
+
+        - title: Pagination
+          file: spectaql/documentation/graphql-api/pagination.md
+
+        - title: Errors
+          file: spectaql/documentation/graphql-api/errors.md
+
+        - title: Extra features
+          file: spectaql/documentation/graphql-api/extra_features.md
+
+  x-outroItems:
+    - title: Webhooks
+      items:
+        - title: Overview
+          file: spectaql/documentation/webhooks/webhooks_overview.md
+
+        - title: Troubleshooting
+          file: spectaql/documentation/webhooks/webhooks_troubleshooting.md
+
+    - title: Guides
+      items:
+        - title: Using Room Access Keys
+          file: spectaql/documentation/guides/room_access_keys.md
+
+        - title: External Sales API
+          file: spectaql/documentation/guides/external_sales_api.md
+
+        - title: Rates & Restrictions API
+          file: spectaql/documentation/guides/rates_and_restrictions_api.md

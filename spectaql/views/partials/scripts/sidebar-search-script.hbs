@@ -1,0 +1,227 @@
+<script>
+(function() {
+    const sidebarSearchInput = document.getElementById('sidebar-search-input');
+    const sidebarSearchClearButton = document.getElementById('sidebar-search-clear');
+    const navigationElement = document.getElementById('nav');
+
+    function updateClearButtonVisibility() {
+        if (sidebarSearchInput.value.length > 0) {
+            sidebarSearchClearButton.classList.add('visible');
+        } else {
+            sidebarSearchClearButton.classList.remove('visible');
+        }
+    }
+
+    function performSearch(searchTerm) {
+        clearHighlights();
+
+        if (searchTerm.trim() === '') {
+            showAllNavigationItems();
+            return;
+        }
+
+        const navigationGroups = getNavigationGroups();
+
+        navigationGroups.forEach(function (navigationGroup) {
+            let groupHasVisibleItems = false;
+            const navigationGroupItems = getNavigationGroupItems(navigationGroup);
+
+            navigationGroupItems.forEach(function (navigationGroupItem) {
+                if (navigationGroupItem.classList.contains('nav-group-section')) {
+                    // Handle sidebar navigation items with sections (like Queries, Mutations, etc.)
+                    const sectionTitleElement = navigationGroupItem.querySelector('.nav-group-section-title a');
+                    const sectionTitle = sectionTitleElement.textContent;
+                    const sectionTitleMatches = textMatchesSearchTerm(sectionTitle, searchTerm);
+
+                    if (isExactMatch(sectionTitle, searchTerm)) {
+                        highlightElement(sectionTitleElement);
+                    }
+
+                    const sectionItems = getNavigationGroupSectionItems(navigationGroupItem);
+
+                    // Check if this section has child items or is just a standalone section title
+                    if (sectionItems.length === 0) {
+                        // The section title itself is the searchable item (for x-intro and x-outro sections)
+                        if (sectionTitleMatches) {
+                            showElement(navigationGroupItem);
+                            groupHasVisibleItems = true;
+                        } else {
+                            hideElement(navigationGroupItem);
+                        }
+                    } else {
+                        // Section with child items (e.g., "Queries" with query list)
+                        let sectionHasVisibleItems = false;
+
+                        sectionItems.forEach(function (sectionItem) {
+                            const itemLink = sectionItem.querySelector('a');
+                            const itemText = itemLink.textContent;
+
+                            if (sectionTitleMatches || textMatchesSearchTerm(itemText, searchTerm)) {
+                                showElement(sectionItem);
+                                sectionHasVisibleItems = true;
+
+                                if (isExactMatch(itemText, searchTerm)) {
+                                    highlightElement(itemLink);
+                                }
+                            } else {
+                                hideElement(sectionItem);
+                            }
+                        });
+
+                        if (sectionHasVisibleItems) {
+                            showElement(navigationGroupItem);
+                            navigationGroupItem.classList.add('nav-scroll-expand');
+                            groupHasVisibleItems = true;
+                        } else {
+                            hideElement(navigationGroupItem);
+                        }
+                    }
+                } else {
+                    // Handle sidebar navigation items without sections (like Introduction)
+                    const itemLink = navigationGroupItem.querySelector('a');
+                    const itemText = itemLink.textContent;
+
+                    if (textMatchesSearchTerm(itemText, searchTerm)) {
+                        showElement(navigationGroupItem);
+                        groupHasVisibleItems = true;
+
+                        if (isExactMatch(itemText, searchTerm)) {
+                            highlightElement(itemLink);
+                        }
+                    } else {
+                        hideElement(navigationGroupItem);
+                    }
+                }
+            });
+
+            if (groupHasVisibleItems) {
+                showElement(navigationGroup);
+            } else {
+                hideElement(navigationGroup);
+            }
+        });
+    }
+
+    function isExactMatch(text, searchTerm) {
+        return normalizeText(text) === normalizeText(searchTerm);
+    }
+
+    function highlightElement(element) {
+        element.classList.add('search-highlight');
+    }
+
+    function clearHighlights() {
+        const highlightedElements = navigationElement.querySelectorAll('.search-highlight');
+        highlightedElements.forEach(function (element) {
+            element.classList.remove('search-highlight');
+        });
+    }
+
+    function normalizeText(text) {
+        return text.toLowerCase().trim();
+    }
+
+    function showAllNavigationItems() {
+        clearHighlights();
+
+        const navigationGroups = getNavigationGroups();
+        const currentlyActiveSection = findCurrentlyActiveSection();
+
+        navigationGroups.forEach(function (navigationGroup) {
+            showElement(navigationGroup);
+
+            const navigationGroupItems = getNavigationGroupItems(navigationGroup);
+            navigationGroupItems.forEach(function (navigationGroupItem) {
+                showElement(navigationGroupItem);
+
+                if (navigationGroupItem.classList.contains('nav-group-section')) {
+                    const sectionItems = getNavigationGroupSectionItems(navigationGroupItem);
+                    sectionItems.forEach(function (sectionItem) {
+                        showElement(sectionItem);
+                    });
+
+                    // Collapse all sections except the one that is currently active (scrolled to)
+                    if (navigationGroupItem === currentlyActiveSection) {
+                        navigationGroupItem.classList.add('nav-scroll-expand');
+                    } else {
+                        navigationGroupItem.classList.remove('nav-scroll-expand');
+                    }
+                }
+            });
+        });
+    }
+
+    function findCurrentlyActiveSection() {
+        const activeLink = navigationElement.querySelector('.nav-scroll-active');
+
+        if (activeLink) {
+            return activeLink.closest('.nav-group-section');
+        }
+
+        return null;
+    }
+
+    function getNavigationGroups() {
+        return navigationElement.querySelectorAll('.nav-group');
+    }
+
+    function showElement(element) {
+        element.style.display = '';
+    }
+
+    function getNavigationGroupItems(navigationGroup) {
+        return navigationGroup.querySelectorAll(':scope > .nav-group-items > li');
+    }
+
+    function getNavigationGroupSectionItems(navigationGroupSection) {
+        return navigationGroupSection.querySelectorAll('.nav-group-section-items > li');
+    }
+
+    function textMatchesSearchTerm(text, searchTerm) {
+        const normalizedText = normalizeText(text);
+        const normalizedSearchTerm = normalizeText(searchTerm);
+
+        if (normalizedText.includes(normalizedSearchTerm)) {
+            return true;
+        }
+
+        let textIndex = 0;
+        let searchIndex = 0;
+
+        while (textIndex < normalizedText.length && searchIndex < normalizedSearchTerm.length) {
+            if (normalizedText[textIndex] === normalizedSearchTerm[searchIndex]) {
+                searchIndex++;
+            }
+            textIndex++;
+        }
+
+        return searchIndex === normalizedSearchTerm.length;
+    }
+
+    function hideElement(element) {
+        element.style.display = 'none';
+    }
+
+    function clearSearch() {
+        sidebarSearchInput.value = '';
+        updateClearButtonVisibility();
+        performSearch('');
+        sidebarSearchInput.focus();
+    }
+
+    sidebarSearchInput.addEventListener('input', function (event) {
+        updateClearButtonVisibility();
+        performSearch(event.target.value);
+    });
+
+    sidebarSearchInput.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+            clearSearch();
+        }
+    });
+
+    sidebarSearchClearButton.addEventListener('click', function () {
+        clearSearch();
+    });
+})();
+</script>

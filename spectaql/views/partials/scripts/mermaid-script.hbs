@@ -1,0 +1,47 @@
+<script src="/js/mermaid-11.8.1.min.js"></script>
+
+<script>
+    var isDarkTheme = document.body.classList.contains('spectaql-dark');
+
+    document.querySelectorAll('.mermaid-container .mermaid').forEach(function (element) {
+        var originalContent = element.textContent.trim();
+        element.setAttribute('data-original-content', originalContent);
+    });
+
+    mermaid.initialize({
+        theme: isDarkTheme ? 'dark' : 'default',
+        flowchart: {
+            useMaxWidth: true,
+        }
+    });
+
+    mermaid.run();
+
+    // Re-initialize when theme changes
+    var observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+            if (mutation.attributeName === 'class' && mutation.target.id === 'spectaql') {
+                var isDark = document.body.classList.contains('spectaql-dark');
+
+                document.querySelectorAll('.mermaid-container .mermaid').forEach(function (element) {
+                    var originalContent = element.getAttribute('data-original-content');
+                    element.removeAttribute('data-processed');
+                    element.innerHTML = originalContent;
+                });
+
+                mermaid.initialize({
+                    theme: isDark ? 'dark' : 'default',
+                    flowchart: {
+                        useMaxWidth: true,
+                    }
+                });
+
+                mermaid.run();
+            }
+        });
+    });
+
+    observer.observe(document.body, {attributes: true});
+</script>
+
+

@@ -1,0 +1,36 @@
+<script>
+(function() {
+    function addAnchor(heading, id, scrollTarget) {
+        var anchor = document.createElement('a');
+        anchor.className = 'header-anchor';
+        anchor.href = '#' + id;
+        anchor.textContent = '#';
+
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            var url = window.location.href.split('#')[0] + '#' + id;
+            window.history.pushState(null, '', url);
+            scrollTarget.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        heading.insertBefore(anchor, heading.firstChild);
+    }
+
+    var headings = document.querySelectorAll('#content :is(h1[id], h2[id], h3[id], h4[id], h5[id], h6[id])');
+    headings.forEach(function (heading) {
+        addAnchor(heading, heading.getAttribute('id'), heading);
+    });
+
+    var introductionAndOutroItemTitles = document.querySelectorAll('#content :is(.introduction-item-title, .outro-item-title)');
+    introductionAndOutroItemTitles.forEach(function (heading) {
+        var parent = heading.closest('.introduction-item, .outro-item');
+        addAnchor(heading, parent.getAttribute('id'), parent);
+    });
+
+    var operationAndDefinitionHeadings = document.querySelectorAll('#content :is(.operation, .definition) :is(.operation-heading, .definition-heading)');
+    operationAndDefinitionHeadings.forEach(function (heading) {
+        var parent = heading.closest(':is(.operation, .definition)');
+        addAnchor(heading, parent.getAttribute('id'), parent);
+    });
+})();
+</script>

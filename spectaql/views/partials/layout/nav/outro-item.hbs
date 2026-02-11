@@ -1,0 +1,18 @@
+{{#if items}}
+{{! This has nested items - render as a nav-group with sections }}
+    <div class="nav-group">
+        <h4 class="nav-group-title">{{title}}</h4>
+        <ul class="nav-group-items">
+            {{#each items}}
+                <li class="nav-group-section">
+                    <h5 class="nav-group-section-title">
+                        <a href="#{{slugify ../title}}-{{slugify title}}">{{title}}</a>
+                    </h5>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+{{else}}
+{{! This is a simple item (no nested items) - render as a list item }}
+    <li><a href="#{{slugify title}}">{{title}}</a></li>
+{{/if}}

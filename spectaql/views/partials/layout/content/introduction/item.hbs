@@ -1,0 +1,27 @@
+{{#if items}}
+{{! This is a section with nested items - parent gets group-heading style }}
+    <h1 id="{{slugify title}}" class="group-heading"
+        data-traverse-target="{{slugify title}}">{{title}}</h1>
+    {{#each items}}
+    <div id="{{slugify ../title}}-{{slugify title}}" class="introduction-item"
+         data-traverse-target="{{slugify ../title}}-{{slugify title}}">
+        <h2 class="introduction-item-title">{{title}}</h2>
+        <div class="doc-row">
+            <div class="doc-copy">
+                {{{prefixHeadingIds (md (processCustomMarkdown (loadTextFromFile file interpolateReferences=true))) ../title title}}}
+            </div>
+        </div>
+    </div>
+    {{/each}}
+{{else}}
+{{! This is a simple item (no nested items) - also gets group-heading style }}
+    <h1 id="{{slugify title}}" class="group-heading"
+        data-traverse-target="{{slugify title}}">{{title}}</h1>
+    <div class="introduction-item">
+        <div class="doc-row">
+            <div class="doc-copy">
+                {{{prefixHeadingIds (md (processCustomMarkdown (loadTextFromFile file interpolateReferences=true))) title}}}
+            </div>
+        </div>
+    </div>
+{{/if}}
