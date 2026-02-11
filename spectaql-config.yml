@@ -1,14 +1,13 @@
 spectaql:
-  targetDir: ./frontend/web/spectaql
-  faviconUrl: /favicon.ico
+  targetDir: ./build
   themeDir: ./spectaql
-  additionalImages:
-    - ./frontend/web/svg/logo_black.svg
+  # additionalImages:
+  #   - ./frontend/web/svg/logo_black.svg
   displayAllServers: true
   oneFile: true
-
+ 
 introspection:
-  schemaFile: ./frontend/Components/GraphQL/public.graphql
+  schemaFile: ./schema.gql
   dynamicExamplesProcessingModule: ./spectaql/dynamicExamples.js
   queryNameStrategy: capitalizeFirst
 
@@ -22,7 +21,7 @@ spectaqlDirective:
 
 extensions:
   graphqlScalarExamples: true
-
+  
 servers:
   - url: https://www.3rpms.de/graphql
     description: Production server
@@ -64,7 +63,7 @@ info:
         - title: Extra features
           file: spectaql/documentation/graphql-api/extra_features.md
 
-  x-outroItems:
+  x-outroItems: #The documentation doesn't contain this
     - title: Webhooks
       items:
         - title: Overview
