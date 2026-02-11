@@ -1,0 +1,4744 @@
+schema {
+  query: DefaultQuery
+  mutation: DefaultMutation
+}
+
+"""
+# Authorization
+            
+            Authorization is handled by authorization HTTP headers `X-AUTH-KEY` and `X-AUTH-SECRET`.
+            
+            The actual values for the authorization headers can be found in the application, under `Integrations` after creating `ERP API`.
+            
+            # Visualization
+            
+            In order to visualize the GraphQL schema for getting a better overview, you can use GraphQL visualization tool **[GraphQL VOYAGER](https://apis.guru/graphql-voyager/)**.
+            1. Open the tool
+            2. Click `CHANGE SCHEMA`
+            3. Navigate to `INTROSPECTION` tab in the modal
+            4. Click `COPY INTROSPECTION QUERY` button
+            5. Paste the copied query in the query section of **this tool** and execute it
+            6. Copy & paste the result of the query back in **GraphQL VOYAGER** INTROSPECTION field
+            7. Click `DISPLAY`
+            
+            # Testing
+            
+            We provide Postman collection with example requests to most of the endpoints.
+            
+"""
+type DefaultQuery {
+  dummyGet(id: Int!): String
+
+  "Get list of `Categories`."
+  categories(
+    """
+    Example:
+                                ```
+                                filter: {
+                                    externalId: "99"
+                                }
+                                ```
+                                
+    """
+    filter: CategoryFilter
+
+    """
+    Offset for pagination. Uses `0-based indexing`.
+                                
+    """
+    offset: Int
+
+    """
+    Records per page. Max: `100`.
+                                
+    """
+    limit: Int
+  ): PaginatedData
+
+  "Get list of `Items`."
+  items(
+    """
+    Example:
+                                ```
+                                filter: {
+                                    externalId: "99"
+                                }
+                                ```
+                                
+    """
+    filter: ItemFilter
+
+    """
+    Offset for pagination. Uses `0-based indexing`.
+                                
+    """
+    offset: Int
+
+    """
+    Records per page. Max: `100`.
+                                
+    """
+    limit: Int
+  ): PaginatedData
+
+  "Get list of `ItemVariations`."
+  itemVariations(
+    """
+    Example:
+                                ```
+                                filter: {
+                                    externalId: "99"
+                                }
+                                ```
+                                
+    """
+    filter: ItemVariationFilter
+
+    """
+    Offset for pagination. Uses `0-based indexing`.
+                                
+    """
+    offset: Int
+
+    """
+    Records per page. Max: `100`.
+                                
+    """
+    limit: Int
+  ): PaginatedData
+
+  "Get `SalesOrder` by `ID` or `externalId`."
+  salesOrderGet(
+    """
+    ID of the `SalesOrder` in **Trusted Returns** platform.
+                                Example:
+                                ```
+                                id: 123
+                                ```
+                                
+    """
+    id: Int!
+  ): SalesOrder
+
+  "Get list of `SalesOrders`."
+  salesOrders(
+    """
+    A set of `filter` objects. Example:
+                                ```
+                                filter: {
+                                    status: finished,
+                                    createdAt: [
+                                        {operator: gt, value: "2019-01-01"},
+                                        {operator: lt, value: "2020-12-01"}
+                                    ]
+                                }
+                                ```
+                                
+    """
+    filter: SalesOrderFilter
+
+    """
+    Offset for pagination. Uses `0-based indexing`.
+                                
+    """
+    offset: Int
+
+    """
+    Records per page. Max: `100`.
+                                
+    """
+    limit: Int
+
+    """
+    A set of `sort` objects. Example:
+                                ```
+                                orderBy: [{field: orderDate, direction: asc}, {field: createdAt, direction: asc}]
+                                ```
+                                
+    """
+    orderBy: [SalesOrderSortItem!]
+  ): PaginatedData
+
+  "Get list of `SalesOrderParcels`."
+  salesOrderParcels(
+    """
+    A set of `filter` objects. Example:
+                                ```
+                                filter: {
+                                    trackingNumbers: [
+                                        "999990067042",
+                                        "1299882223323232"
+                                    ]
+                                }
+                                ```
+                                
+    """
+    filter: SalesOrderParcelFilter
+
+    """
+    Offset for pagination. Uses `0-based indexing`.
+                                
+    """
+    offset: Int
+
+    """
+    Records per page. Max: `100`.
+                                
+    """
+    limit: Int
+  ): PaginatedData
+
+  "Get `ReturnOrder` by `ID`."
+  returnOrderGet(
+    """
+    ID of the `ReturnOrder` in **Trusted Returns** platform.
+                                Example:
+                                ```
+                                id: 123
+                                ```
+                                
+    """
+    id: Int!
+  ): ReturnOrder
+
+  "Get list of `ReturnOrders`."
+  returnOrders(
+    """
+    A set of `filter` objects. Example:
+                                ```
+                                filter: {
+                                    status: finished,
+                                    createdAt: [
+                                        {operator: gt, value: "2019-01-01"},
+                                        {operator: lt, value: "2020-12-01"}
+                                    ]
+                                }
+                                ```
+                                
+    """
+    filter: ReturnOrderFilter
+
+    """
+    Offset for pagination. Uses `0-based indexing`.
+                                
+    """
+    offset: Int
+
+    """
+    Records per page. Max: `100`.
+                                
+    """
+    limit: Int
+
+    """
+    A set of `sort` objects. Example:
+                                ```
+                                orderBy: [{field: createdAt, direction: asc}]
+                                
+    """
+    orderBy: [ReturnOrderSortItem!]
+  ): PaginatedData
+
+  "Get list of `ReturnOrderParcels`."
+  returnOrderParcels(
+    """
+    A set of `filter` objects. Example:
+                                ```
+                                filter: {
+                                    trackingNumber: {operator: in, value: ["65170178590003", "09985052960063", "00335958250013022150"]}
+                                }
+                                ```
+                                
+    """
+    filter: ReturnOrderParcelFilter
+
+    """
+    Offset for pagination. Uses `0-based indexing`.
+                                
+    """
+    offset: Int
+
+    """
+    Records per page. Max: `100`.
+                                
+    """
+    limit: Int
+
+    """
+    A set of `sort` objects. Example:
+                                ```
+                                orderBy: [{field: createdAt, direction: desc}]
+                                
+    """
+    orderBy: [ReturnOrderParcelSortItem!]
+  ): PaginatedData
+
+  "Get list of `CarrierContracts`."
+  carrierContracts(
+    """
+    Example:
+                                ```
+                                filter: {
+                                    trackOutbound: { operator: eq, value: true }
+                                }
+                                ```
+                                
+    """
+    filter: CarrierContractFilter
+
+    """
+    Offset for pagination. Uses `0-based indexing`.
+                                
+    """
+    offset: Int
+
+    """
+    Records per page. Max: `100`.
+                                
+    """
+    limit: Int
+  ): PaginatedData
+
+  "Get Return Orders for helpdesk widget"
+  returnOrderHelpdesk(
+    "Helpdesk ticket ID"
+    ticketId: Int
+
+    "Helpdesk entry (ticket, case) identifier"
+    number: String
+  ): [HelpdeskReturnOrder]
+
+  "Get list of `Subcustomers`."
+  subcustomers(
+    """
+    Offset for pagination. Uses `0-based indexing`.
+                                
+    """
+    offset: Int
+
+    """
+    Records per page. Max: `100`.
+                                
+    """
+    limit: Int
+  ): PaginatedData
+
+  "Get list of `Warehouses`."
+  warehouses(
+    """
+    Example:
+                                ```
+                                filter: {
+                                    externalId: {operator: in, value: ["12345", "345345"]}
+                                }
+                                ```
+                                
+    """
+    filter: WarehouseFilter
+
+    """
+    Offset for pagination. Uses `0-based indexing`.
+                                
+    """
+    offset: Int
+
+    """
+    Records per page. Max: `100`.
+                                
+    """
+    limit: Int
+  ): PaginatedData
+
+  "Get `WarehouseFeedback` by `ID` or `externalId`."
+  warehouseFeedbackGet(
+    """
+    ID of the `WarehouseFeedback` in **Trusted Returns** platform.
+                                Example:
+                                ```
+                                id: 123
+                                ```
+                                
+    """
+    id: Int
+
+    """
+    Example:
+                                ```
+                                externalId: "12345abcde"
+                                ```
+                                
+    """
+    externalId: String
+  ): WarehouseFeedback
+
+  "Get list of `WarehouseFeedback`."
+  warehouseFeedbackList(
+    """
+    Example:
+                                ```
+                                filter: {
+                                    externalId: {operator: eq, value: "12345"}
+                                }
+                                ```
+                                
+    """
+    filter: WarehouseFeedbackFilter
+
+    """
+    Offset for pagination. Uses `0-based indexing`.
+                                
+    """
+    offset: Int
+
+    """
+    Records per page. Max: `100`.
+                                
+    """
+    limit: Int
+  ): PaginatedData
+
+  "Get list of `Return Options`"
+  returnOptions(
+    """
+    Example:
+                                ```
+                                filter: {
+                                    option: {operator: eq, value: [dropoff]}
+                                }
+                                ```
+                                
+    """
+    filter: ReturnOptionFilter
+
+    """
+    Offset for pagination. Uses `0-based indexing`.
+                                
+    """
+    offset: Int
+
+    """
+    Records per page. Max: `100`.
+                                
+    """
+    limit: Int
+  ): PaginatedData
+
+  "Get list of `Return Reasons`."
+  returnReasons(
+    """
+    Example:
+                                ```
+                                filter: {
+                                    externalId: {operator: eq, value: "12345"}
+                                }
+                                ```
+                                
+    """
+    filter: ReturnReasonFilter
+
+    """
+    Offset for pagination. Uses `0-based indexing`.
+                                
+    """
+    offset: Int
+
+    """
+    Records per page. Max: `100`.
+                                
+    """
+    limit: Int
+  ): PaginatedData
+}
+
+"""
+`Category` filter object.
+            
+"""
+input CategoryFilter {
+  externalId: [[ComparisonString!]]
+  createdAt: [[ComparisonDateTime!]]
+  updatedAt: [[ComparisonDateTime!]]
+}
+
+"""
+Input object for comparing `string` fields
+            
+"""
+input ComparisonString {
+  operator: ComparisonOperatorString
+  value: [String!]
+}
+
+"""
+Set of supported comparison operators for `string` filters
+            
+"""
+enum ComparisonOperatorString {
+  "Equals"
+  eq
+
+  "Is not equal"
+  neq
+
+  "Contains"
+  in
+
+  "Is `NULL`"
+  isNull
+
+  "Is not `NULL`"
+  isNotNull
+}
+
+"""
+Input object for comparing `datetime` fields
+            
+"""
+input ComparisonDateTime {
+  operator: ComparisonOperatorNumeric
+  value: DateTime
+}
+
+"""
+Set of supported comparison operators for `numeric` filters
+            
+"""
+enum ComparisonOperatorNumeric {
+  "Equals"
+  eq
+
+  "Is not equal"
+  neq
+
+  "Less than"
+  lt
+
+  "Less than or equal"
+  lte
+
+  "Greater than"
+  gt
+
+  "Greater than or equal"
+  gte
+
+  "Contains"
+  in
+
+  "Is `NULL`"
+  isNull
+
+  "Is not `NULL`"
+  isNotNull
+}
+
+scalar DateTime
+
+type PaginatedData {
+  totalCount: Int
+  data: [Page]
+}
+
+union Page = CarrierContract | Category | Item | ItemVariation | ReturnOrder | ReturnOrderParcel | SalesOrder | SalesOrderParcel | Subcustomer | Warehouse | ReturnOption | ReturnReason | WarehouseFeedback | WarehouseFeedbackCollection | OutboundLabel
+
+type CarrierContract {
+  id: Int
+
+  "Parent CarrierContract"
+  parent: CarrierContract
+
+  "Name of the Carrier Contract"
+  name: String
+
+  """
+  `Id` of the `CarrierContract` in the system using the API. Used to identify `CarrierContracts` via API when querying, updating or referencing them.
+                      
+  """
+  externalId: String
+
+  """
+  Value identifying the external version of the entity.
+                      
+  """
+  externalVersion: String
+
+  "Technical Name of the Carrier Contract"
+  technicalName: String
+
+  "Name of the Carrier"
+  carrier: String
+
+  "Carrier Contract has Shipping configuration set"
+  hasShipping: Boolean
+
+  """
+  Carrier module configuration as JSON string
+                      
+  """
+  shippingConfiguration: CarrierContractModuleConfiguration
+
+  """
+  Carrier module configuration as JSON string
+                      
+  """
+  trackingConfiguration: CarrierContractModuleConfiguration
+
+  """
+  Carrier module configuration as JSON string
+                      
+  """
+  locationConfiguration: CarrierContractModuleConfiguration
+
+  "Carrier Contract has Tracking configuration set"
+  hasTracking: Boolean
+
+  "Carrier Contract has Location configuration set"
+  hasLocation: Boolean
+
+  "Carrier Contract is configured to track Outbound shipments"
+  trackOutbound: Boolean
+
+  "Carrier Contract is configured to track Return shipments"
+  trackReturns: Boolean
+
+  createdAt: DateTime
+  updatedAt: DateTime
+
+  """
+  A `Subcustomer` to which the `CarrierContract` belongs to
+                      
+  """
+  subcustomer: Subcustomer
+
+  "path of the Carrier logo"
+  logo: String
+}
+
+type CarrierContractModuleConfiguration {
+  "Carrier module configuration as JSON string"
+  configuration: JsonObject
+}
+
+scalar JsonObject
+
+type Subcustomer {
+  """
+  `ID` of the `Subcustomer` in the system using the API. Used to identify the entity via API when querying, updating or referencing
+                      
+  """
+  externalId: String
+
+  """
+  Value identifying the external version of the entity
+                      
+  """
+  externalVersion: String
+
+  """
+  `Display name` of the `Subcustomer`
+                      
+  """
+  name: String
+
+  """
+  `Legal address` of the `Subcustomer`
+                      
+  """
+  legalAddress: Address
+
+  """
+  `Legal information` of the `Subcustomer`
+                      
+  """
+  legalEntity: Entity
+}
+
+type Address {
+  street: String
+  houseNumber: String
+  additionalInfo: String
+  state: String
+  postalCode: String
+  city: String
+  country: String
+}
+
+type Entity {
+  title: String
+  salutation: String
+  firstName: String
+  lastName: String
+  email: String
+  company: String
+  registrationNumber: String
+  vatId: String
+  phone: String
+  mobilePhone: String @deprecated(reason: "Use `phone` instead\n                    ")
+  landlinePhone: String @deprecated(reason: "Use `phone` instead\n                    ")
+}
+
+type Category {
+  """
+  ID of the `Category` in the system using the API. Used to identify the entity via API when querying, updating or referencing
+                      
+  """
+  externalId: String
+
+  """
+  Value identifying the external version of the entity
+                      
+  """
+  externalVersion: String
+
+  """
+  Value of `externalId` of the parent Category. Leave empty for the root Categories
+                      
+  """
+  parentExternalId: String
+
+  """
+  Identifier of the icon from the [Font Awesome](https://fontawesome.com/icons?d=gallery) Pro gallery
+                      
+  """
+  icon: String
+
+  translations: [NameTranslation]
+  businessParameters: [BusinessParameter]
+}
+
+type NameTranslation {
+  locale: String
+  name: String
+}
+
+type BusinessParameter {
+  id: Int
+
+  "`Entity` to which the Business Parameter belongs to"
+  entity: String
+
+  "`Data type` of the Business Parameter"
+  type: String
+
+  "`Name` of the Business Parameter"
+  name: String
+
+  "`Technical name` of the Business Parameter"
+  technicalName: String
+
+  "Value of the Business Parameter"
+  value: String
+
+  "Array Value of the Business Parameter"
+  valueArray: [String]
+}
+
+type Item {
+  """
+  ID of the `Item` in the system using the API. Used to identify the entity via API when querying, updating or referencing
+                      
+  """
+  externalId: String
+
+  """
+  Value identifying the external version of the entity
+                      
+  """
+  externalVersion: String
+
+  translations: [ItemTranslation]
+  categories: [Category]
+  itemVariations: [ItemVariation]
+  itemAttributes: [ItemAttribute]
+  businessParameters: [BusinessParameter]
+  flags: ItemFlags
+}
+
+type ItemTranslation {
+  locale: String
+  name: String
+  description: String
+}
+
+type ItemVariation {
+  name: String
+  externalId: String
+  sku: String
+  ean: String
+  price: Float
+  currency: String
+
+  "in kilograms"
+  weight: Float
+
+  "in centimeters"
+  width: Float
+
+  "in centimeters"
+  length: Float
+
+  "in centimeters"
+  height: Float
+
+  "`URL` of the Item Variation `Image`."
+  image: String
+
+  item: Item
+  itemAttributeValues: [ItemAttributeValue]
+  itemCustoms: ItemCustoms
+  businessParameters: [BusinessParameter]
+  hazmatData: [HazmatEntry]
+  components: [ItemVariationComponent]
+}
+
+type ItemAttributeValue {
+  name: String
+  itemAttribute: ItemAttribute
+  value: String
+  translations: [NameTranslation]
+}
+
+type ItemAttribute {
+  name: String
+  attribute: String
+  itemAttributeValues: [ItemAttributeValue]
+  translations: [NameTranslation]
+}
+
+type ItemCustoms {
+  description: String
+  hsCode: String
+  originCountry: String
+}
+
+type HazmatEntry {
+  "`UN class` (eg. 1.1, 1.2, 9)"
+  class: String
+
+  "`Modifier` of the `UN class`"
+  modifier: String
+
+  "UN number (eg. 3481)"
+  unNumber: Int
+}
+
+type ItemVariationComponent {
+  component: ItemVariation
+  quantity: Int
+}
+
+type ItemFlags {
+  """
+  A flag indicating that `Item` (or `SalesOrderItem`) consists of multiple pieces and is shipped with several `SalesOrderParcels`.
+                      
+  """
+  isMultiParcelItem: Boolean
+
+  """
+  A flag indicating that `Item` (or `SalesOrderItem`) is bulky.
+                      
+  """
+  isBulky: Boolean
+}
+
+type ReturnOrder {
+  id: Int!
+
+  "`Number` of the Return Order in **Trusted Returns** platform"
+  number: String
+
+  "`Unique ID` of the Return Order"
+  uuid: String
+
+  "Current `status` of the Return Order"
+  status: ReturnOrderStatusEnum
+
+  serviceOrderType: ServiceOrderTypeEnum
+
+  "Set of permissions applicable to the current Return Order state"
+  permissions: ReturnOrderPermissions
+
+  "Historical `statuses` of the Return Order"
+  returnOrderStatuses: [ReturnOrderStatus]
+
+  createdAt: DateTime
+  updatedAt: DateTime
+  createdBy: String
+  updatedBy: String
+  returnUntilDate: Date
+
+  "Estimated date when the first parcel of the Return Order will reach the Warehouse"
+  estimatedDeliveryDate: DateTime
+
+  "Date & time when the first parcel of the Return Order reached the Warehouse"
+  deliveredAt: DateTime
+
+  consumer: Consumer
+  locale: String
+  salesOrders: [SalesOrder]
+  refundState: String
+  refundAmount: Float
+  refundCurrency: String
+  refundDate: Date
+  refundPaymentType: String
+  returnOrderParcels: [ReturnOrderParcel]
+  returnOrderItems: [ReturnOrderItem]
+
+  """
+  Address from which the pickup should be organized and goods returned in case of unsuccessful return
+                      
+  """
+  shippingAddress: Address
+
+  """
+  Contact information of the person / company responsible for the return
+                      
+  """
+  shippingEntity: Entity
+
+  """
+  Billing address in cases when the Consumer pays for the return
+                      
+  """
+  billingAddress: Address
+
+  """
+  Contact information of the person / company paying for the return
+                      
+  """
+  billingEntity: Entity
+
+  salesChannel: SalesChannel
+  businessParameters: [BusinessParameter]
+  origin: ReturnOrderOriginEnum
+
+  "The owner of the bank account associated with the Return Order"
+  bankAccountOwner: String
+
+  "IBAN of the Return Order"
+  iban: String
+
+  managementPortalUrl: String
+  selfServicePortalUrl: String
+
+  "BIC of the Return Order"
+  bic: String
+}
+
+enum ReturnOrderStatusEnum {
+  "Return Order has been created"
+  created
+
+  "Return Order is being configured by the Consumer"
+  in_process
+
+  "Return Order is waiting for approval"
+  waiting_approval
+
+  "Return Order has been approved"
+  approved
+
+  "Return Order has been rejected"
+  rejected
+
+  "Waiting for the Consumer to pay for the return"
+  pending_payment
+
+  "Return Option has been chosen and configured"
+  option_selected
+
+  "A Shipping label has been provided for the Return Order"
+  finished
+
+  "Return Order is in transit"
+  transit
+
+  "Return Order has been delivered to the Warehouse"
+  warehouse
+
+  "Return Order has been processed by the Warehouse"
+  processed
+
+  "An exception has occurred during the transportation"
+  exception
+
+  "Return Order has been closed"
+  closed
+
+  "All items from the Return Order have been returned already"
+  completed
+}
+
+"Applied `ServiceOrderType`"
+enum ServiceOrderTypeEnum {
+  "Within withdrawal period"
+  within_withdrawal_period
+
+  "After withdrawal period"
+  after_withdrawal_period
+
+  "After withdrawal period within warranty"
+  after_withdrawal_period_within_warranty
+
+  "After withdrawal period after warranty"
+  after_withdrawal_period_after_warranty
+
+  "Bounced"
+  bounced
+}
+
+type ReturnOrderPermissions {
+  allowReturn: Permission
+  allowReturnOrderItemChange: Permission
+  allowFinishing: Permission
+  allowReturnOptionChange: Permission
+  allowReturnLabelDownload: Permission
+  allowCanceling: Permission
+  allowOnlyReturnLabelView: Permission
+
+  "Whether or not Warehouse Feedback can be added to the Return Order"
+  allowAddWarehouseFeedback: Permission
+}
+
+type Permission {
+  value: Boolean!
+  reason: String
+  message: String
+  show: Boolean
+}
+
+type ReturnOrderStatus {
+  status: ReturnOrderStatusEnum
+
+  "Datetime of the status entry creation time in the system"
+  createdAt: DateTime
+
+  "Datetime of the actual event"
+  timestamp: DateTime
+}
+
+scalar Date
+
+type Consumer {
+  uuid: String
+
+  """
+  ID of the `Consumer` in the system using the API. Used to identify the entity via API when querying, updating or referencing
+                      
+  """
+  externalId: String
+
+  """
+  Value identifying the external version of the entity
+                      
+  """
+  externalVersion: String
+
+  firstName: String
+  lastName: String
+  email: String
+  tags: [String]
+  businessParameters: [BusinessParameter]
+}
+
+type SalesOrder {
+  id: Int!
+
+  """
+  ID of the `Sales Order` in the system using the API. Used to identify the entity via API when querying, updating or referencing
+                      
+  """
+  externalId: String
+
+  """
+  Value identifying the external version of the entity
+                      
+  """
+  externalVersion: String
+
+  "Original `Number` of the Sales Order"
+  number: String
+
+  """
+  ID of the `Sales Order` in the source system from which it was imported to the system using the API
+                      
+  """
+  sourceExternalId: String
+
+  """
+  `Number` of the `Sales Order` in the source system from which it was imported to the system using the API
+                      
+  """
+  sourceNumber: String
+
+  "`Unique ID` of the Sales Order"
+  uuid: String
+
+  "Set of permissions applicable to the current Sales Order state"
+  permissions: SalesOrderPermissions
+
+  "`Date` when the Sales Order was originally created"
+  orderDate: DateTime
+
+  "Sales Order creation date in **Trusted Returns** platform"
+  createdAt: DateTime
+
+  updatedAt: DateTime
+  createdBy: String
+  updatedBy: String
+  status: SalesOrderStatusEnum
+  salesOrderItems: [SalesOrderItem]
+  salesOrderParcels: [SalesOrderParcel]
+  shippingAddress: Address
+  shippingEntity: Entity
+  billingAddress: Address
+  billingEntity: Entity
+  consumer: Consumer
+  total: Float
+  currency: String
+  locale: String
+  paymentType: String
+  salesChannel: SalesChannel
+  businessParameters: [BusinessParameter]
+  tags: [String]
+  selfServicePortalSearchUrl: String
+  currencySymbol: String
+  returnOrders: [ReturnOrder!]
+}
+
+type SalesOrderPermissions {
+  "Whether or not Warehouse Feedback can be added to the Sales Order"
+  allowAddWarehouseFeedback: Permission
+}
+
+enum SalesOrderStatusEnum {
+  "Sales Order has been created"
+  created
+
+  "Sales Order is being processed"
+  in_process
+
+  "Sales Order has been passed over to the Carrier"
+  finished
+
+  "Sales Order is being delivered"
+  transit
+
+  "Sales Order has been delivered to the Consumer"
+  delivered
+
+  "An exception has occurred during the transportation"
+  exception
+
+  "All items of the SalesOrder have been returned"
+  completed
+
+  "Sales Order has been cancelled"
+  cancelled
+
+  "Sales Order has been returned to the sender"
+  returned_to_sender
+}
+
+type SalesOrderItem {
+  id: Int!
+  name: String
+  type: ItemTypeEnum
+  parent: SalesOrderItem
+  children: [SalesOrderItem]
+
+  """
+  ID of the `Sales Order Item` in the system using the API. Used to identify the entity via API when querying, updating or referencing
+                      
+  """
+  externalId: String
+
+  "Value identifying the external version of the entity"
+  externalVersion: String
+
+  """
+  A `Subcustomer/Retailer` delivering goods to the 'Consumer'. Indicates to whom the goods should be returned to.
+                      
+  """
+  subcustomer: Subcustomer
+
+  price: Float
+  quantity: Float
+  sku: String
+  ean: String
+  itemVariation: ItemVariation
+  salesOrderParcelItems: [SalesOrderParcelItem]
+  translations: [ItemTranslation]
+  itemCustoms: ItemCustoms
+  businessParameters: [BusinessParameter]
+  flags: ItemFlags
+  hazmatData: [HazmatEntry]
+  warrantyUntilDate: Date
+
+  """
+  `URL` of the `Image`.
+                      
+  """
+  image: String
+
+  salesOrder: SalesOrder!
+  returnOrderItems: [ReturnOrderItem!]!
+}
+
+enum ItemTypeEnum {
+  "Regular item"
+  item
+
+  "Assembly item (having multiple components)"
+  assembly_item
+
+  "Bundle item (having multiple components)"
+  bundle
+
+  "Set item (having multiple components)"
+  set
+
+  "Component"
+  component
+
+  "Freebie (item given for free based on conditions)"
+  freebie
+
+  "Voucher"
+  voucher
+
+  "Gift Card"
+  gift_card
+}
+
+type SalesOrderParcelItem {
+  salesOrderParcel: SalesOrderParcel
+  salesOrderItem: SalesOrderItem
+  quantity: Int
+}
+
+type SalesOrderParcel {
+  """
+  ID of the `Sales Order Parcel` in the system using the API. Used to identify the entity via API when querying, updating or referencing
+                      
+  """
+  externalId: String
+
+  """
+  Value identifying the external version of the entity
+                      
+  """
+  externalVersion: String
+
+  """
+  A `Subcustomer/Retailer` delivering goods to the 'Consumer'. Indicates to whom the goods should be returned to.
+                      
+  """
+  subcustomer: Subcustomer
+
+  """
+  A `Warehouse` to which the goods will be returned to.
+                      
+                      > **!IMPORTANT**: Please, note that some carrier have the `Warehouse` hard-tied to the `CarrierContract`,
+                      therefore setting this to a `Warehouse` not assigned to the `CarrierContract` will have no effect!
+                      
+  """
+  warehouse: Warehouse
+
+  reference: String
+  status: SalesOrderStatusEnum
+  trackingNumber: String
+  carrierParcelNumber: String
+
+  "Contains latest known tracking status data-set"
+  trackingStatus: TrackingStatus
+
+  """
+  Contains all known tracking statuses
+                      
+                      > **!INFO**: Full TrackingStatusHistory data is exposed *ONLY* when querying `salesOrderParcels` *directly*. It won't be available if you query `SalesOrderParcel`
+                      as a sub-object of `SalesOrder` for example
+                      
+  """
+  trackingStatusHistory: [TrackingStatus]
+
+  carrier: String
+  deliveredAt: DateTime
+
+  "in kilograms"
+  weight: Float
+
+  "in centimeters"
+  width: Float
+
+  "in centimeters"
+  length: Float
+
+  "in centimeters"
+  height: Float
+
+  businessParameters: [BusinessParameter]
+
+  "`SalesOrder` to which the Parcel belongs to"
+  salesOrder: SalesOrder
+
+  salesOrderParcelItems: [SalesOrderParcelItem]
+  bounced: Boolean
+}
+
+type Warehouse {
+  id: Int
+
+  """
+  `ID` of the `Warehouse` in the system using the API. Used to identify the entity via API when querying, updating or referencing
+                      
+  """
+  externalId: String
+
+  """
+  Value identifying the external version of the entity
+                      
+  """
+  externalVersion: String
+
+  """
+  A `Subcustomer` to which the `Warehouse` belongs to
+                      
+  """
+  subcustomer: Subcustomer
+
+  "`Name` of the `Warehouse`"
+  name: String
+
+  "`Timezone` in which the `Warehouse` resides"
+  timezone: String
+
+  "`Address` of the Warehouse"
+  address: Address
+
+  legalEntity: Entity
+}
+
+type TrackingStatus {
+  timestamp: DateTime
+  eventCode: String
+  statusLevel1: String
+  statusLevel2: String
+  statusLevel3: String
+  originalStatusLevel1: String
+  originalStatusLevel2: String
+  originalStatusLevel3: String
+  originalStatusLevel4: String
+  latitude: Float
+  longitude: Float
+}
+
+type ReturnOrderItem {
+  id: Int!
+  name: String
+  resultingName: String
+  action: ReturnAction
+  serviceOrderType: ServiceOrderTypeEnum
+
+  """
+  Whether or not the `ReturnOrderItem` should be physically shipped by the Consumer
+                      
+  """
+  ship: Boolean
+
+  shipBeforeArrival: Boolean
+  returnReason: ReturnReason
+  returnPortalReturnReason: ReturnPortalReturnReason
+  itemVariation: ItemVariation
+  exchangeItemVariation: ItemVariation
+  salesOrderItem: SalesOrderItem
+  quantity: Float
+  sku: String
+  ean: String
+  refundAmount: Float
+  partialRefundAmount: Float
+  status: String
+
+  """
+  Represents the `ReturnOrderItem` distribution across `ReturnOrderParcels`
+                      
+  """
+  returnOrderParcelItems: [ReturnOrderParcelItem]
+
+  businessParameters: [BusinessParameter]
+  hazmatData: [HazmatEntry]
+
+  """
+  `URL` of the `Image`.
+                      
+  """
+  image: String
+
+  returnOrder: ReturnOrder!
+  returnReasonAttributes: ReturnOrderItemReturnReasonAttributes
+}
+
+"Chosen Return Order Item action"
+enum ReturnAction {
+  "Keep the item"
+  keep
+
+  "Return the item"
+  return
+
+  "Refund the item"
+  refund
+
+  "Claim the item"
+  claim
+
+  "Exchange the item"
+  exchange
+
+  "Repair the item"
+  repair
+}
+
+type ReturnReason {
+  externalId: String
+  reason: String
+  level: String
+  translations: [NameTranslation]
+  attributes: [ReturnReasonAttribute]
+  parentReason: ReturnReason
+}
+
+type ReturnReasonAttribute {
+  name: String
+  type: String
+  value: String
+  valueArray: [String]
+}
+
+type ReturnPortalReturnReason {
+  name: String
+  returnPortalReturnReasonAttributes: [ReturnPortalReturnReasonAttribute]
+  parent: ReturnPortalReturnReason
+}
+
+type ReturnPortalReturnReasonAttribute {
+  id: Int
+  type: String
+  isEnabled: Boolean
+  label: String
+}
+
+type ReturnOrderParcelItem {
+  quantity: Int
+  returnOrderParcel: ReturnOrderParcel
+  returnOrderItem: ReturnOrderItem
+}
+
+type ReturnOrderParcel {
+  "`Unique ID` of the Return Order Parcel"
+  uuid: String
+
+  "Internal `Number` of the Return Order Parcel"
+  number: String
+
+  "`ReturnOrder` to which the Parcel belongs to"
+  returnOrder: ReturnOrder
+
+  "`ReturnOption` using which the Parcel is being shipped"
+  returnOption: ReturnOption
+
+  """
+  A `Subcustomer/Retailer` to which the `ReturnOrderParcel` will be sent to.
+                      
+  """
+  subcustomer: Subcustomer
+
+  """
+  A `Warehouse` to which the goods will be returned to.
+                      
+                      > **!IMPORTANT**: Please, note that some carrier have the `Warehouse` hard-tied to the `CarrierContract`,
+                      therefore setting this to a `Warehouse` not assigned to the `CarrierContract` will have no effect!
+                      
+  """
+  warehouse: Warehouse
+
+  trackingNumber: String
+  trackingUrl: String
+
+  "`Parcel number` issued by the Carrier"
+  carrierParcelNumber: String
+
+  "Contains latest known tracking status data-set"
+  trackingStatus: TrackingStatus
+
+  """
+  Contains all known tracking statuses
+                      
+                      > **!INFO**: Full TrackingStatusHistory data is exposed *ONLY* when querying `returnOrderParcels` *directly*. It won't be available if you query `ReturnOrderParcel`
+                      as a sub-object of `ReturnOrder` for example
+                      
+  """
+  trackingStatusHistory: [TrackingStatus]
+
+  returnOrderParcelStatuses: [ReturnOrderParcelStatus]
+  createdAt: DateTime
+  updatedAt: DateTime
+  returnService: String
+  shipmentPrice: Float
+  shipmentPriceCurrency: String
+  shipmentPriceConsumer: Float
+  shipmentPriceConsumerCurrency: String
+  dropoffLocationUuid: String
+  pickupDate: DateTime
+  pickupTime: String
+  comments: String
+
+  """
+  Address from which the pickup should be organized and goods returned in case of unsuccessful return
+                      
+  """
+  shippingAddress: Address
+
+  """
+  Contact information of the person / company responsible for the return
+                      
+  """
+  shippingEntity: Entity
+
+  """
+  Billing address in cases when the Consumer pays for the return
+                      
+  """
+  billingAddress: Address
+
+  """
+  Contact information of the person / company paying for the return
+                      
+  """
+  billingEntity: Entity
+
+  dropoffAddress: Address
+  dropoffLatitude: Float
+  dropoffLongitude: Float
+  status: ReturnOrderStatusEnum
+
+  """
+  Datetime when the `ReturnOrderParcel` was delivered to the Warehouse
+                      
+  """
+  deliveredAt: DateTime
+
+  dropoffUntilDate: Date
+
+  """
+  Represents the `ReturnOrderItem` distribution across `ReturnOrderParcels`
+                      
+  """
+  returnOrderParcelItems: [ReturnOrderParcelItem]
+
+  "in kilograms"
+  weight: Float
+
+  "in centimeters"
+  width: Float
+
+  "in centimeters"
+  length: Float
+
+  "in centimeters"
+  height: Float
+
+  businessParameters: [BusinessParameter]
+  labelType: LabelTypeEnum
+
+  "base64 encoded string of the label"
+  label: String
+
+  salesOrderParcel: SalesOrderParcel
+  bounced: Boolean
+}
+
+type ReturnOption {
+  id: Int
+
+  "`Name` representing the `ReturnOption` in the System"
+  name: String
+
+  "`CarrierContract` behind the `ReturnOption`"
+  carrierContract: CarrierContract
+
+  "Destination `Warehouse`"
+  warehouse: Warehouse
+
+  "`pickup` or `dropoff`"
+  option: String
+
+  "Is this option enabled"
+  enabled: Boolean
+
+  status: ReturnOptionStatusEnum
+}
+
+enum ReturnOptionStatusEnum {
+  implemented
+  pending
+}
+
+type ReturnOrderParcelStatus {
+  status: ReturnOrderStatusEnum
+
+  "Datetime of the status entry creation time in the system"
+  createdAt: DateTime
+
+  "Datetime of the actual event"
+  timestamp: DateTime
+}
+
+"Chosen Return Order Parcel label type"
+enum LabelTypeEnum {
+  "Mobile Label"
+  qr_code
+
+  "Print Label"
+  pdf_label
+}
+
+type ReturnOrderItemReturnReasonAttributes {
+  text: String
+  textarea: String
+  media: [ReturnReasonAttributeMedia]
+}
+
+type ReturnReasonAttributeMedia {
+  key: String
+  filename: String
+  mimetype: String
+  filetype: String
+}
+
+type SalesChannel {
+  name: String
+  isActive: Boolean
+  channelKey: String
+}
+
+"Where Return Order originated from"
+enum ReturnOrderOriginEnum {
+  "Management Portal (created by e.g. customer support user)"
+  management_portal
+
+  "Self Service Portal (created by the consumer)"
+  self_service_portal
+
+  "Preprinted return label"
+  preprinted
+
+  "Warehouse Feedback"
+  warehouse_feedback
+
+  "Carrier (bounced shipments)"
+  carrier
+
+  "Integration (created by e.g. Amazon Selling Partner integration or GraphQL API)"
+  integration
+}
+
+type WarehouseFeedback {
+  id: Int
+
+  """
+  A flag indicating whether the `WarehouseFeedback` can be edited or is locked.
+                      
+  """
+  canEdit: Boolean!
+
+  """
+  `ID` of the `WarehouseFeedback` in the system using the API. Used to identify the entity via API when querying, updating or referencing
+                      
+  """
+  externalId: String
+
+  """
+  Value identifying the external version of the entity
+                      
+  """
+  externalVersion: String
+
+  """
+  `Warehouse` to which the feedback is related to
+                      
+  """
+  warehouse: Warehouse
+
+  """
+  `ReturnOrderItem` to which the feedback is related to.
+                      
+  """
+  returnOrderItem: ReturnOrderItem
+
+  """
+  `SalesOrderItem` to which the feedback is related to.
+                      
+  """
+  salesOrderItem: SalesOrderItem
+
+  createdAt: DateTime
+  updatedAt: DateTime
+  createdBy: String
+  updatedBy: String
+
+  """
+  `WarehouseFeedbackCollection` to which the feedback belongs to
+                      
+  """
+  warehouseFeedbackCollection: WarehouseFeedbackCollection
+
+  """
+  List of `WarehouseFeedbackGrade` objects representing the feedback grades given by the Warehouse
+                      
+  """
+  warehouseFeedbackGrades: [WarehouseFeedbackGrade]
+
+  """
+  List of `WarehouseFeedbackGradeAggregated` objects representing the aggregated feedback grades given by the Warehouse
+                      
+  """
+  warehouseFeedbackGradesAggregated: [WarehouseFeedbackGradeAggregated]
+
+  comments: String
+
+  """
+  `Tracking number` of the parcel related to the feedback
+                      
+  """
+  trackingNumber: String
+
+  status: WarehouseFeedbackStatus
+}
+
+type WarehouseFeedbackCollection {
+  id: Int
+  warehouse: Warehouse
+  warehouseFeedbacks: [WarehouseFeedback!]!
+
+  """
+  `Tracking number` of the parcel related to the feedback
+                      
+  """
+  trackingNumber: String
+
+  """
+  `Date` when the `WarehouseFeedbackCollection` was created
+                      
+  """
+  createdAt: DateTime
+
+  """
+  Creator of the `WarehouseFeedbackCollection`
+                      
+  """
+  createdBy: String
+
+  """
+  `User` who created the `WarehouseFeedbackCollection`
+                      
+  """
+  createdByUser: User
+
+  """
+  `WarehouseFeedbackCollection` which was overridden by the current one.
+                      
+  """
+  overriddenWarehouseFeedbackCollection: WarehouseFeedbackCollection
+
+  status: WarehouseFeedbackCollectionStatus
+}
+
+type User {
+  email: String
+  firstName: String
+  lastName: String
+  fullName: String
+}
+
+enum WarehouseFeedbackCollectionStatus {
+  default
+  cancelled
+}
+
+type WarehouseFeedbackGrade {
+  id: Int
+
+  """
+  `ID` of the `WarehouseFeedbackGrade` in the system using the API. Used to identify the entity via API when querying, updating or referencing
+                      
+  """
+  externalId: String
+
+  """
+  Value identifying the external version of the entity
+                      
+  """
+  externalVersion: String
+
+  "Grade given by the Warehouse"
+  grade: String!
+
+  "Quantity of items related to the grade"
+  quantity: Int!
+
+  "Comments given by the Warehouse"
+  comments: String
+}
+
+type WarehouseFeedbackGradeAggregated {
+  "Grade given by the Warehouse"
+  value: Int!
+
+  "Name of the grade"
+  name: String!
+
+  "Quantity of items related to the grade"
+  quantity: Int!
+}
+
+enum WarehouseFeedbackStatus {
+  pending
+  completed
+  failed
+  unprocessable
+  partial
+  cancelled
+}
+
+type OutboundLabel {
+  id: Int
+  uuid: String
+  trackingUrl: String
+  labelData: OutboundLabelData
+  senderAddress: Address
+  senderEntity: Entity
+  receiverAddress: Address
+  receiverEntity: Entity
+  comment: String
+  trackingNumber: String
+  createdAt: DateTime
+  carrierContract: CarrierContract
+  width: Float
+  length: Float
+  height: Float
+  weight: Float
+  errorMessage: String
+}
+
+type OutboundLabelData {
+  type: LabelTypeEnum
+
+  "base64 encoded string of the label"
+  data: String
+
+  "filename with extension"
+  filename: String
+}
+
+"""
+`Item` filter object.
+            
+"""
+input ItemFilter {
+  externalId: [[ComparisonString!]]
+
+  "Will filter `Items` where `ItemVariation` attributes meet the specified conditions"
+  itemVariations: ItemVariationFilter
+  createdAt: [[ComparisonDateTime!]]
+  updatedAt: [[ComparisonDateTime!]]
+}
+
+"""
+`ItemVariation` filter object.
+            
+"""
+input ItemVariationFilter {
+  externalId: [[ComparisonString!]]
+  sku: [[ComparisonString!]]
+  ean: [[ComparisonString!]]
+  createdAt: [[ComparisonDateTime!]]
+  updatedAt: [[ComparisonDateTime!]]
+}
+
+"""
+`SalesOrder` filter object.
+            
+"""
+input SalesOrderFilter {
+  """
+  `External ID` of the SalesOrder
+                      
+  """
+  externalId: [[ComparisonString!]]
+
+  "System generated `UUID` of the SalesOrder"
+  uuid: [[ComparisonString!]]
+
+  "Original `Number` of the SalesOrder"
+  number: [[ComparisonString!]]
+  shippingEntity: ShippingEntityFilter
+  status: [[ComparisonSalesOrderStatus!]]
+  orderDate: [[ComparisonDateTime!]]
+
+  "SalesChannel of the ReturnOrder"
+  salesChannel: SalesChannelFilter
+
+  "Will filter `SalesOrders` where `SalesOrderParcel` attributes meet the specified conditions"
+  salesOrderParcels: SalesOrderParcelFilter
+  createdAt: [[ComparisonDateTime!]]
+  updatedAt: [[ComparisonDateTime!]]
+}
+
+"""
+`ShippingEntity` filter object.
+            
+"""
+input ShippingEntityFilter {
+  email: [[ComparisonString!]]
+  firstName: [[ComparisonString!]]
+  lastName: [[ComparisonString!]]
+}
+
+"""
+Input object for comparing SalesOrder `status` fields
+            
+"""
+input ComparisonSalesOrderStatus {
+  operator: ComparisonOperatorString
+  value: [SalesOrderStatusEnum!]!
+}
+
+"""
+`SalesChannel` filter object.
+            
+"""
+input SalesChannelFilter {
+  """
+  `Key` of the SalesChannel
+                      
+  """
+  channelKey: [[ComparisonString!]]
+}
+
+"""
+`SalesOrderParcel` filter object.
+            
+"""
+input SalesOrderParcelFilter {
+  uuid: [[ComparisonString!]]
+
+  """
+  `External ID` of the SalesOrderParcel
+                      
+  """
+  externalId: [[ComparisonString!]]
+  subcustomer: SubcustomerFilter
+
+  """
+  `Tracking number` of the SalesOrderParcel
+                      
+  """
+  trackingNumber: [[ComparisonString!]]
+  createdAt: [[ComparisonDateTime!]]
+  updatedAt: [[ComparisonDateTime!]]
+  carrier: [[ComparisonString!]]
+  bounced: [[ComparisonBoolean!]]
+
+  """
+  `Parcel references` of the SalesOrderParcel, can be used to filter by multiple tracking numbers
+                      
+  """
+  parcelReferences: [[ComparisonStringCollection!]]
+}
+
+"""
+`Subcustomer` filter object.
+            
+"""
+input SubcustomerFilter {
+  """
+  `External ID` of the Subcustomer
+                      
+  """
+  externalId: [[ComparisonString!]]
+
+  """
+  `Name` of the Subcustomer
+                      
+  """
+  name: [[ComparisonString!]]
+}
+
+"""
+Input object for comparing `boolean` fields
+            
+"""
+input ComparisonBoolean {
+  operator: ComparisonOperatorBoolean
+  value: Boolean
+}
+
+"""
+Set of supported comparison operators for `boolean` filters
+            
+"""
+enum ComparisonOperatorBoolean {
+  "Equals"
+  eq
+
+  "Is not equal"
+  neq
+}
+
+"""
+Input object for comparing `string` fields with a collection
+            
+"""
+input ComparisonStringCollection {
+  operator: ComparisonOperatorStringCollection
+  value: String!
+}
+
+"""
+Set of supported comparison operators for `string` collection filters
+            
+"""
+enum ComparisonOperatorStringCollection {
+  "Contains"
+  contains
+
+  "Does not contain"
+  notContains
+}
+
+"""
+SalesOrder sort configuration object.
+            
+"""
+input SalesOrderSortItem {
+  field: SalesOrderSortField
+  direction: SortDirection
+}
+
+"""
+Set of supported SalesOrder sort fields.
+            
+"""
+enum SalesOrderSortField {
+  "SalesOrder `ID` in **Trusted Returns** platform"
+  id
+
+  "SalesOrder `date` as specified during the import"
+  orderDate
+
+  "SalesOrder `creation date` in **Trusted Returns** platform"
+  createdAt
+
+  "SalesOrder `update date` in **Trusted Returns** platform"
+  updatedAt
+
+  "SalesOrder `number` as specified during the import"
+  number
+}
+
+"""
+Set of supported sort directions.
+            
+"""
+enum SortDirection {
+  "Ascending"
+  asc
+
+  "Descending"
+  desc
+}
+
+"""
+`ReturnOrder` filter object.
+            
+"""
+input ReturnOrderFilter {
+  """
+  `UUID` of the ReturnOrder
+                      
+  """
+  uuid: [[ComparisonString!]]
+
+  """
+  `Number` of the ReturnOrder
+                      
+  """
+  number: [[ComparisonString!]]
+  shippingEntity: ShippingEntityFilter
+  serviceOrderType: [[ComparisonServiceOrderType!]]
+
+  """
+  Current `Status` of the ReturnOrder
+                      
+  """
+  status: [[ComparisonReturnOrderStatus!]]
+
+  """
+  Historical `Statuses` of the ReturnOrder
+                      
+  """
+  returnOrderStatuses: ReturnOrderStatusFilter
+
+  """
+  `SalesChannel` of the ReturnOrder
+                      
+  """
+  salesChannel: SalesChannelFilter
+
+  """
+  Will filter `ReturnOrders` where `ReturnOrderParcel` attributes meet the specified conditions
+                      
+  """
+  returnOrderParcels: ReturnOrderParcelFilter
+
+  """
+  `Refund date` of the ReturnOrder
+                      
+  """
+  refundDate: [[ComparisonDateTime!]]
+  createdAt: [[ComparisonDateTime!]]
+  updatedAt: [[ComparisonDateTime!]]
+}
+
+"""
+Input object for comparing ReturnOrder `serviceOrderType` field
+            
+"""
+input ComparisonServiceOrderType {
+  operator: ComparisonOperatorString
+  value: [ServiceOrderTypeEnum!]!
+}
+
+"""
+Input object for comparing ReturnOrder `status` fields
+            
+"""
+input ComparisonReturnOrderStatus {
+  operator: ComparisonOperatorString
+  value: [ReturnOrderStatusEnum!]!
+}
+
+"""
+`ReturnOrderStatus` filter object.
+            
+"""
+input ReturnOrderStatusFilter {
+  """
+  `Status` of the ReturnOrder
+                      
+  """
+  status: [[ComparisonReturnOrderStatus!]]
+
+  """
+  Datetime of the actual event
+                      
+  """
+  timestamp: [[ComparisonDateTime!]]
+
+  """
+  Datetime of the status entry `creation time in the system`
+                      
+  """
+  createdAt: [[ComparisonDateTime!]]
+}
+
+"""
+`ReturnOrderParcel` filter object.
+            
+"""
+input ReturnOrderParcelFilter {
+  """
+  `UUID` of the ReturnOrderParcel
+                      
+  """
+  uuid: [[ComparisonString!]]
+
+  """
+  `Tracking number` of the ReturnOrderParcel
+                      
+  """
+  trackingNumber: [[ComparisonString!]]
+
+  """
+  `Carrier parcel number` of the ReturnOrderParcel
+                      
+  """
+  carrierParcelNumber: [[ComparisonString!]]
+  subcustomer: SubcustomerFilter
+  createdAt: [[ComparisonDateTime!]]
+  updatedAt: [[ComparisonDateTime!]]
+
+  """
+  `Status` of the ReturnOrderParcel
+                      
+  """
+  status: [[ComparisonReturnOrderStatus!]]
+  bounced: [[ComparisonBoolean!]]
+
+  """
+  `Parcel references` of the SalesOrderParcel, can be used to filter by multiple tracking numbers
+                      
+  """
+  parcelReferences: [[ComparisonStringCollection!]]
+}
+
+"""
+ReturnOrder sort configuration object.
+            
+"""
+input ReturnOrderSortItem {
+  field: ReturnOrderSortField
+  direction: SortDirection
+}
+
+"""
+Set of supported ReturnOrder sort fields.
+            
+"""
+enum ReturnOrderSortField {
+  "ReturnOrder `ID` in **Trusted Returns** platform"
+  id
+
+  "ReturnOrder `refund date` in **Trusted Returns** platform"
+  refundDate
+
+  "ReturnOrder `creation date` in **Trusted Returns** platform"
+  createdAt
+
+  "ReturnOrder `update date` in **Trusted Returns** platform"
+  updatedAt
+
+  "ReturnOrder `number` in **Trusted Returns** platform"
+  number
+}
+
+"""
+ReturnOrderParcel sort configuration object.
+            
+"""
+input ReturnOrderParcelSortItem {
+  field: ReturnOrderParcelSortField
+  direction: SortDirection
+}
+
+"""
+Set of supported ReturnOrderParcel sort fields.
+            
+"""
+enum ReturnOrderParcelSortField {
+  "ReturnOrderParcel `creation date` in **Trusted Returns** platform"
+  createdAt
+}
+
+"""
+`CarrierContract` filter object.
+            
+"""
+input CarrierContractFilter {
+  "ID of the CarrierContract"
+  id: [[ComparisonNumeric!]]
+
+  """
+  `External ID` of the CarrierContract
+                      
+  """
+  externalId: [[ComparisonString!]]
+
+  "Name of the CarrierContract"
+  name: [[ComparisonString!]]
+
+  "Name of the carrier"
+  carrier: [[ComparisonString!]]
+
+  "CarrierContract has `Shipping` configuration set"
+  hasShipping: [[ComparisonBoolean!]]
+
+  "CarrierContract has `Tracking` configuration set"
+  hasTracking: [[ComparisonBoolean!]]
+
+  "CarrierContract has `Location` configuration set"
+  hasLocation: [[ComparisonBoolean!]]
+
+  "CarrierContract is configured to track `Outbound` shipments"
+  trackOutbound: [[ComparisonBoolean!]]
+
+  "CarrierContract is configured to track `Return` shipments"
+  trackReturns: [[ComparisonBoolean!]]
+  createdAt: [[ComparisonDateTime!]]
+  updatedAt: [[ComparisonDateTime!]]
+  subcustomer: SubcustomerFilter
+}
+
+"""
+Input object for comparing `numeric` fields
+            
+"""
+input ComparisonNumeric {
+  operator: ComparisonOperatorNumeric
+  value: [Int!]
+}
+
+type HelpdeskReturnOrder {
+  createdAt: DateTime
+  number: String
+  shippingAddress: Address
+  shippingEntity: Entity
+  salesOrderNumbers: [String]
+  returnOrderParcels: [ReturnOrderParcel]
+  overviewUrl: String
+  businessParameters: [BusinessParameter]
+  estimatedDeliveryDate: DateTime
+}
+
+"""
+`Warehouse` filter object.
+            
+"""
+input WarehouseFilter {
+  """
+  `External ID` of the Warehouse
+                      
+  """
+  externalId: [[ComparisonString!]]
+  createdAt: [[ComparisonDateTime!]]
+  updatedAt: [[ComparisonDateTime!]]
+  subcustomer: SubcustomerFilter
+}
+
+"""
+`WarehouseFeedback` filter object
+            
+"""
+input WarehouseFeedbackFilter {
+  """
+  `External ID` of the WarehouseFeedback
+                      
+  """
+  externalId: [[ComparisonString!]]
+
+  """
+  Filter for the Warehouse associated with the WarehouseFeedback
+                      
+  """
+  warehouse: WarehouseFilter
+
+  """
+  Filter for the SalesOrder associated with the WarehouseFeedback
+                      
+  """
+  salesOrder: SalesOrderFilter
+
+  """
+  Filter for the ReturnOrder associated with the WarehouseFeedback
+                      
+  """
+  returnOrder: ReturnOrderFilter
+  createdAt: [[ComparisonDateTime!]]
+  updatedAt: [[ComparisonDateTime!]]
+}
+
+"""
+`ReturnOption` filter object
+            
+"""
+input ReturnOptionFilter {
+  option: [[ComparisonReturnOptionOption!]]
+}
+
+"""
+Input object for comparing ReturnOption `option` fields
+            
+"""
+input ComparisonReturnOptionOption {
+  operator: ComparisonOperatorString
+  value: [ReturnOptionOptionEnum!]!
+}
+
+enum ReturnOptionOptionEnum {
+  "Drop-off return option"
+  dropoff
+
+  "Pick-up return option"
+  pickup
+}
+
+"""
+`ReturnReason` filter object
+            
+"""
+input ReturnReasonFilter {
+  """
+  `External ID` of the ReturnReason
+                      
+  """
+  externalId: [[ComparisonString!]]
+}
+
+"""
+# Authorization
+            
+            Authorization is handled by authorization HTTP headers `X-AUTH-KEY` and `X-AUTH-SECRET`.
+            
+            The actual values for the authorization headers can be found in the application, under `Settings / API Credentials`.
+            
+            # Visualization
+            
+            In order to visualize the GraphQL schema for getting a better overview, you can use GraphQL visualization tool **[GraphQL VOYAGER](https://apis.guru/graphql-voyager/)**.
+            1. Open the tool
+            2. Click `CHANGE SCHEMA`
+            3. Navigate to `INTROSPECTION` tab in the modal
+            4. Click `COPY INTROSPECTION QUERY` button
+            5. Paste the copied query in the query section of **this tool** and execute it
+            6. Copy & paste the result of the query back in **GraphQL VOYAGER** INTROSPECTION field
+            7. Click `DISPLAY`
+            
+            # Testing
+            
+            We provide Postman collection with example requests to most of the endpoints.
+            
+"""
+type DefaultMutation {
+  "For **updating** `Consumers`. There are no mandatory fields and only the ones you provide will get updated."
+  consumersUpdate(consumers: [ConsumerUpdateInput]!): Boolean
+
+  returnOrderCreate(returnOrderInput: ReturnOrderInput!): ReturnOrder!
+  warehouses(warehouses: [WarehouseInput!]!): Boolean!
+  warehousesUpdate(warehouses: [WarehouseUpdateInput!]!): Boolean!
+  warehouseFeedback(feedback: WarehouseFeedbackInput!): WarehouseFeedbackOutput!
+  warehouseFeedbackDelete(id: Int, externalId: String): Boolean!
+
+  """
+  For **creating** `Categories` of Items.
+                      
+  """
+  categories(
+    """
+    An array of `Category` objects
+                                
+    """
+    categories: [CategoryInput]!
+
+    """
+    Key of the Sales Channel to operate with.
+                                
+                                > **INFO:** Look for the `salesChannelKey` value in the application under **Return Portal > Sales Channels > Channel key**.
+                                
+                                If `salesChannelKey` isn't provided, Items will be imported into the **default Sales Channel** set in the application!
+                                
+    """
+    salesChannelKey: String
+  ): Boolean
+
+  """
+  For **updating** `Categories` of Items.
+                      
+                      There are no mandatory fields and only the ones you provide will get updated.
+                      
+  """
+  categoriesUpdate(
+    """
+    An array of `Category` objects
+                                
+    """
+    categories: [CategoryUpdateInput]!
+
+    """
+    Key of the Sales Channel to operate with.
+                                
+                                > **INFO:** Look for the `salesChannelKey` value in the application under **Return Portal > Sales Channels > Channel key**.
+                                
+                                If `salesChannelKey` isn't provided, Items will be imported into the **default Sales Channel** set in the application!
+                                
+    """
+    salesChannelKey: String
+  ): Boolean
+
+  """
+  For **creating** `Items`
+                      
+  """
+  items(
+    """
+    Array of `Items`
+                                
+    """
+    items: [ItemInput]!
+
+    """
+    Key of the Sales Channel to operate with.
+                                
+                                > **INFO:** Look for the `salesChannelKey` value in the application under **Return Portal > Sales Channels > Channel key**.
+                                
+                                If `salesChannelKey` isn't provided, Items will be imported into the **default Sales Channel** set in the application!
+                                
+    """
+    salesChannelKey: String
+  ): Boolean
+
+  """
+  For **updating** `Items`.
+                      
+                      There are no mandatory fields and only the ones you provide will get updated.
+                      
+  """
+  itemsUpdate(
+    """
+    Array of `Items`
+                                
+    """
+    items: [ItemUpdateInput]!
+
+    """
+    Key of the Sales Channel to operate with.
+                                
+                                > **INFO:** Look for the `salesChannelKey` value in the application under **Return Portal > Sales Channels > Channel key**.
+                                
+                                If `salesChannelKey` isn't provided, Items will be imported into the **default Sales Channel** set in the application!
+                                
+    """
+    salesChannelKey: String
+  ): Boolean
+
+  """
+  For **creating** `Sales Orders`
+                      
+  """
+  salesOrders(
+    """
+    Array of `Sales Order` objects
+                                
+    """
+    salesOrders: [SalesOrderInput]!
+
+    """
+    **DEPRECATED!!!** Use `salesChannelKey` on the `SalesOrderInput` level instead.
+                                
+    """
+    salesChannelKey: String
+  ): Boolean
+
+  """
+  For **updating** `Sales Orders`.
+                      
+                      There are no mandatory fields and only the ones you provide will get updated.
+                      
+  """
+  salesOrdersUpdate(
+    """
+    Array of `Sales Order` objects
+                                
+    """
+    salesOrders: [SalesOrderUpdateInput]!
+
+    """
+    **DEPRECATED!!!** Use `salesChannelKey` on the `SalesOrderInput` level instead.
+                                
+    """
+    salesChannelKey: String
+  ): Boolean
+
+  """
+  For **updating** `Return Order`.
+                      
+                      There are no mandatory fields and only the ones you provide will get updated.
+                      
+  """
+  returnOrdersUpdate(
+    """
+    Array of `Return Order` objects
+                                
+    """
+    returnOrders: [ReturnOrderUpdateInput]!
+  ): Boolean
+
+  """
+  For **updating** `Return Order Parcel`.
+                      
+                      There are no mandatory fields and only the ones you provide will get updated.
+                      
+  """
+  returnOrderParcelsUpdate(
+    """
+    Array of `Return Order Parcel` objects
+                                
+    """
+    returnOrderParcels: [ReturnOrderParcelUpdateInput]!
+  ): Boolean
+
+  """
+  For **creating** `Subcustomers`
+                      
+  """
+  subcustomers(
+    """
+    Array of `Subcustomer` objects
+                                
+    """
+    subcustomers: [SubcustomerInput]!
+  ): Boolean
+
+  """
+  For **updating** `Subcustomers`.
+                      There are no mandatory fields and only the ones you provide will get updated.
+                      
+  """
+  subcustomersUpdate(
+    """
+    Array of `Subcustomer` objects
+                                
+    """
+    subcustomers: [SubcustomerUpdateInput]!
+  ): Boolean
+
+  """
+  For **creating** `CarrierContracts`
+                      
+  """
+  carrierContracts(
+    """
+    Array of `CarrierContract` objects
+                                
+    """
+    carrierContracts: [CarrierContractInput]!
+  ): Boolean
+
+  """
+  For **updating** `CarrierContracts`
+                      There are no mandatory fields and only the ones you provide will get updated.
+                      
+  """
+  carrierContractsUpdate(
+    """
+    Array of `CarrierContract` objects
+                                
+    """
+    carrierContracts: [CarrierContractUpdateInput]!
+  ): Boolean
+
+  "Generate return label (pre-printed) for SalesOrderParcel"
+  salesOrderParcelReturnLabel(
+    """
+    Key of the Sales Channel to operate with.
+                                
+                                > **INFO:** Look for the `salesChannelKey` value in the application under **Return Portal > Sales Channels > Channel key**.
+                                
+                                If `salesChannelKey` isn't provided, Items will be imported into the **default Sales Channel** set in the application!
+                                
+    """
+    salesChannelKey: String
+
+    """
+    `External ID` of the SalesOrder
+                                
+    """
+    salesOrderExternalId: String!
+
+    """
+    `External ID` of the SalesOrderParcel
+                                
+    """
+    salesOrderParcelExternalId: String!
+
+    "Drop-off ReturnOption to be used"
+    returnOptionId: Int!
+
+    "Return address. If not provided address from SalesOrder will be used"
+    shippingAddress: AddressInput
+
+    "Return entity. If not provided entity from SalesOrder will be used"
+    shippingEntity: EntityInput
+
+    "Trigger return label regeneration"
+    refresh: Boolean
+
+    "Already known tracking number of the Potential Return Order Parcel. If provided, the return label will not be generated."
+    trackingNumber: String
+  ): ReturnLabel
+
+  """
+  For **creating** `Return Orders` based on bounced `Sales Order` items
+                      
+  """
+  salesOrderBounced(salesOrder: SalesOrderBouncedInput!): ReturnOrder
+}
+
+input ConsumerUpdateInput {
+  "`uuid` or `externalId` of the Consumer to update"
+  reference: String!
+
+  "`First name` of the Consumer"
+  firstName: String
+
+  "`Last name` of the Consumer"
+  lastName: String
+
+  "`E-mail` address of the Consumer"
+  email: String
+
+  "Tags to set (replaces existing tags)"
+  tags: [String]
+
+  "Tags to add (extends existing tags)"
+  addTags: [String]
+
+  "Tags to remove"
+  removeTags: [String]
+  businessParameters: [BusinessParameterInput]
+}
+
+input BusinessParameterInput {
+  "`Technical name` of the Business Parameter"
+  technicalName: String
+
+  "Value of the Business Parameter"
+  value: String
+
+  "Array value of the Business Parameter"
+  valueArray: [String]
+
+  """
+  Pass `true` to delete the object
+                      
+  """
+  delete: Boolean
+}
+
+input ReturnOrderInput {
+  salesChannelKey: String
+  serviceOrderType: ServiceOrderTypeEnum! = within_withdrawal_period
+  salesOrders: [SalesOrderReferenceInput!]!
+  returnOption: ReturnOrderReturnOptionInput!
+  businessParameters: [BusinessParameterInput] = []
+}
+
+input SalesOrderReferenceInput {
+  reference: String!
+  items: [ReturnOrderItemInput!]!
+}
+
+input ReturnOrderItemInput {
+  action: ReturnAction!
+  quantity: Int!
+  sku: String!
+  returnReason: ReturnReasonInput
+  businessParameters: [BusinessParameterInput] = []
+}
+
+input ReturnReasonInput {
+  "ID of the record in the system using the API. Used to identify record via API when querying or updating them"
+  externalId: String!
+}
+
+input ReturnOrderReturnOptionInput {
+  usePreferred: Boolean = false
+  technicalName: String
+  preferredLabelType: LabelTypeEnum
+  pickupDetails: PickupDetailsInput
+}
+
+input PickupDetailsInput {
+  date: Date!
+  phone: String!
+  comments: String
+}
+
+input WarehouseInput {
+  """
+  `Id` of the `Warehouse` in the system using the API. Used to identify `Warehouses` via API when querying, updating or referencing them.
+                      
+  """
+  externalId: String!
+
+  """
+  Value identifying the external version of the entity.
+                      
+  """
+  externalVersion: String
+
+  """
+  `Id` of the `Subcustomer` in the system using the API.
+                      
+  """
+  subcustomerExternalId: String
+
+  """
+  `Display name` of the `Warehouse`
+                      
+  """
+  name: String!
+
+  """
+  `Timezone` of the `Warehouse` (`ISO 8601` format)
+                      
+  """
+  timeZone: String
+
+  """
+  `Legal address` of the `Warehouse`
+                      
+  """
+  address: AddressInput!
+
+  """
+  `Legal information` of the `Warehouse`
+                      
+  """
+  legalEntity: EntityInput!
+}
+
+input AddressInput {
+  street: String!
+  houseNumber: String
+  additionalInfo: String
+  state: String
+  postalCode: String!
+  city: String!
+
+  """
+  `Country` identifier in `ISO 3166-1 alpha-2` format. Examples: `DE`, `US`
+                      
+  """
+  country: String!
+
+  "Flag to indicate that given address is invalid to be used as return address of the sender (Consumer)"
+  addressInvalid: Boolean
+  addressInvalidReason: AddressInvalidReasonEnum
+}
+
+"Reason for address being invalid"
+enum AddressInvalidReasonEnum {
+  "Address is incomplete (empty)"
+  incomplete
+
+  "Address is a packstation address"
+  packstation
+
+  "Address is a point of sales"
+  pos
+
+  "Address was anonymized"
+  anonymized
+}
+
+input EntityInput {
+  title: String
+  salutation: String
+  firstName: String!
+  lastName: String!
+  email: String
+  company: String
+  registrationNumber: String
+  vatId: String
+  phone: String
+  mobilePhone: String
+  landlinePhone: String
+}
+
+input WarehouseUpdateInput {
+  """
+  `Id` of the `Warehouse` in the system using the API. Used to identify `Warehouses` via API when querying, updating or referencing them.
+                      
+  """
+  externalId: String!
+
+  """
+  Value identifying the external version of the entity.
+                      
+  """
+  externalVersion: String
+
+  """
+  `Id` of the `Subcustomer` in the system using the API.
+                      
+  """
+  subcustomerExternalId: String
+
+  """
+  `Display name` of the `Warehouse`
+                      
+  """
+  name: String
+
+  """
+  `Timezone` of the `Warehouse` (`ISO 8601` format)
+                      
+  """
+  timeZone: String
+
+  """
+  `Legal address` of the `Warehouse`
+                      
+  """
+  address: AddressInput
+
+  """
+  `Legal information` of the `Warehouse`
+                      
+  """
+  legalEntity: EntityInput
+
+  """
+  Pass `true` to delete the object
+                      
+  """
+  delete: Boolean
+}
+
+input WarehouseFeedbackInput {
+  """
+  `Id` of the `Warehouse Feedback` in the system using the API. Used to identify `Warehouse Feedback` via API when querying or updating them.
+                      
+  """
+  id: Int
+  returnOrder: WarehouseFeedbackReturnOrderInput
+  salesOrder: WarehouseFeedbackSalesOrderInput
+
+  """
+  `NOTE: Send only 1 array item when using from UI!` An array of "Warehouse Feedback" objects, if they are for the same Sales Order / Return Order. For the UI implementation, provide one item only!
+                      
+  """
+  items: [WarehouseFeedbackItemInput!]
+
+  """
+  `NOTE: Used only by ERP systems!` "External ID" of the "Warehouse" in the system using the API. Used to identify "Warehouse" via API when querying or updating them.
+                      
+  """
+  warehouseExternalId: String
+}
+
+input WarehouseFeedbackReturnOrderInput {
+  """
+  `Id` of the `Return Order` in the system using the API. Used to identify `Return Order` via API when querying or updating them.
+                      
+  """
+  id: Int
+  uuid: String
+  trackingNumber: String
+}
+
+input WarehouseFeedbackSalesOrderInput {
+  """
+  `Id` of the `Sales Order` in the system using the API. Used to identify `Sales Order` via API when querying or updating them.
+                      
+  """
+  id: Int
+
+  """
+  `externalId` or `number` of the Sales Order
+                      
+  """
+  reference: String
+  externalId: String
+  number: String
+  postalCode: String
+  trackingNumber: String
+}
+
+input WarehouseFeedbackItemInput {
+  """
+  `Id` of the `Return Order Item` in the system using the API. Used to identify `Return Order Items` via API when querying or updating them.
+                      
+  """
+  returnOrderItemId: Int
+
+  """
+  `Id` of the `Sales Order Item` in the system using the API. Used to identify `Sales Order Items` via API when querying or updating them.
+                      
+  """
+  salesOrderItemId: Int
+
+  """
+  `SKU` of the `Item` in the system using the API. Used to identify `Items` via API when querying or updating them.
+                      
+  """
+  sku: String
+
+  """
+  `DEPRECATED!` Use "quantity" from "grades" field instead. This field will be removed in the future.
+                      
+  """
+  quantity: Int
+
+  """
+  `LEGACY: Used only by ERP systems!` Comments on the WarehouseFeedback level.
+                      
+  """
+  comments: String
+  grades: [WarehouseFeedbackGradeInput!]
+  timestamp: DateTime
+
+  """
+  Pass `true` to delete the object
+                      
+  """
+  delete: Boolean
+}
+
+input WarehouseFeedbackGradeInput {
+  """
+  `Id` of the `Warehouse Feedback Grade` in the system using the API. Used to identify `Warehouse Feedback Grades` via API when querying or updating them.
+                      
+  """
+  id: Int
+
+  """
+  `NOTE: Used only by ERP!` e.g. serial number, barcode, etc.
+                      
+  """
+  externalId: String
+  grade: WarehouseGradeEnum!
+  quantity: Int
+
+  """
+  Additional comments for the grade
+                      
+  """
+  comments: String
+
+  """
+  Pass `true` to delete the object
+                      
+  """
+  delete: Boolean
+}
+
+"Chosen Return Order Item warehouse grade"
+enum WarehouseGradeEnum {
+  "All good - can be restocked"
+  A
+
+  "Requires manual handling"
+  B
+
+  "Probably needs to be disposed"
+  C
+
+  "Needs to be disposed + some other actions (e.g. hazardous waste)"
+  D
+}
+
+type WarehouseFeedbackOutput {
+  boolean: Boolean
+  salesOrders: [SalesOrder]
+  returnOrders: [ReturnOrder]
+  warehouseFeedback: [WarehouseFeedback]
+}
+
+input CategoryInput {
+  """
+  Id of the `Category` in the system using the API. Used to identify categories via API when querying or updating them.
+                      
+  """
+  externalId: String!
+
+  """
+  Value identifying the external version of the entity.
+                      
+  """
+  externalVersion: String
+
+  """
+  Value of `externalId` of the parent Category. Leave empty for the root Categories.
+                      
+  """
+  parentExternalId: String
+
+  """
+  Identifier of the icon from the [Font Awesome](https://fontawesome.com/icons?d=gallery) Pro gallery. Example: boot
+                      
+  """
+  icon: String
+
+  """
+  An array of `NameTranslationInput` objects
+                      
+  """
+  translations: [NameTranslationInput]!
+
+  """
+  An array of `BusinessParameterInput` objects
+                      
+  """
+  businessParameters: [BusinessParameterInput]
+}
+
+input NameTranslationInput {
+  """
+  Identifier of the `locale`. Examples: `de`, `en_GB`, `fr`
+                      
+  """
+  locale: String!
+
+  """
+  `Name` of the category. Example: `Boots`
+                      
+  """
+  name: String!
+}
+
+input CategoryUpdateInput {
+  """
+  Id of the `Category` in the system using the API. Used to identify categories via API when querying or updating them.
+                      
+  """
+  externalId: String!
+
+  """
+  Value identifying the external version of the entity.
+                      
+  """
+  externalVersion: String
+
+  """
+  Value of `externalId` of the parent Category. Leave empty for the root Categories.
+                      
+  """
+  parentExternalId: String
+
+  """
+  Identifier of the icon from the [Font Awesome](https://fontawesome.com/icons?d=gallery) Pro gallery. Example: boot
+                      
+  """
+  icon: String
+
+  """
+  An array of `NameTranslationInput` objects
+                      
+  """
+  translations: [NameTranslationInput]
+
+  """
+  An array of `BusinessParameterInput` objects
+                      
+  """
+  businessParameters: [BusinessParameterInput]
+
+  """
+  Pass `true` to delete the object
+                      
+  """
+  delete: Boolean
+}
+
+"""
+Model of `Item` for **creation**.
+            
+"""
+input ItemInput {
+  """
+  Id of the `Item` in the system using the API. Used to identify items via API when querying or updating them.
+                      
+  """
+  externalId: String!
+
+  """
+  Value identifying the external version of the entity.
+                      
+  """
+  externalVersion: String
+
+  """
+  An array of `externalId's` of the Categories this `Item` belongs to. Example: `["99", "100"]`.
+                      
+  """
+  categories: [String]
+
+  """
+  An array of `Item Variations`.
+                      
+  """
+  variations: [ItemVariationInput]!
+
+  """
+  An array of `Item Translations`.
+                      
+  """
+  translations: [ItemTranslationInput]!
+
+  """
+  An array of `BusinessParameterInput` objects
+                      
+  """
+  businessParameters: [BusinessParameterInput]
+
+  """
+  A subset of different `Item` flags.
+                      
+  """
+  flags: ItemFlagsInput
+}
+
+"""
+Model of `ItemVariation` for **creation**.
+            
+"""
+input ItemVariationInput {
+  """
+  Type of the `Item Variation`.
+                      
+  """
+  type: ItemTypeEnum
+
+  """
+  `Id` of the `Item Variation` in the system using the API. Used to identify `Item variations` via API when querying or updating them.
+                      
+  """
+  externalId: String!
+
+  """
+  Value identifying the external version of the entity.
+                      
+  """
+  externalVersion: String
+
+  """
+  `EAN` of the `Item Variation`.
+                      
+  """
+  ean: String
+
+  """
+  `SKU` value of the Item Variation.
+                      
+  """
+  sku: String
+
+  """
+  `Price` of the Item Variation.
+                      
+  """
+  price: Float
+
+  """
+  `Currency` of the Item Variation price in `ISO 4217` format. Example: `EUR`.
+                      
+  """
+  currency: String
+
+  """
+  `Weight` of the Item Variation in kilograms
+                      
+  """
+  weight: Float
+
+  """
+  `Width` of the Item Variation in centimeters.
+                      
+  """
+  width: Float
+
+  """
+  `Length` of the Item Variation in centimeters.
+                      
+  """
+  length: Float
+
+  """
+  `Height` of the Item Variation in centimeters.
+                      
+  """
+  height: Float
+
+  """
+  `URL` of the Item Variation `Image`.
+                      
+  """
+  image: String
+
+  """
+  An array of `Item Attributes`.
+                      
+  """
+  attributes: [ItemAttributeInput]
+  itemCustoms: ItemCustomsInput
+
+  """
+  An array of `BusinessParameterInput` objects
+                      
+  """
+  businessParameters: [BusinessParameterInput]
+
+  """
+  Hazardous Materials info entries
+                      
+  """
+  hazmatData: [HazmatEntryInput]
+
+  """
+  An array of `Item Variation Components`.
+                      
+  """
+  components: [ItemVariationComponentInput]
+
+  """
+  Stock information.
+                      
+  """
+  stock: [StockInput!]
+}
+
+input ItemAttributeInput {
+  """
+  Identifying `Name` of the `Item Attribute`. Example: `color`
+                      
+  """
+  name: String
+
+  """
+  An array of `NameTranslationInput` objects representing translations of the `Name` of the `Item Attribute`.
+                      
+  """
+  nameTranslations: [NameTranslationInput]
+
+  """
+  Identifying `Value` of the `Item Attribute`. Example: `red`
+                      
+  """
+  value: String
+
+  """
+  An array of `NameTranslationInput` objects representing translations of the `Value` of the `Item Attribute`.
+                      
+  """
+  valueTranslations: [NameTranslationInput]
+}
+
+input ItemCustomsInput {
+  description: String
+  hsCode: String
+  originCountry: String
+}
+
+input HazmatEntryInput {
+  "`UN class` (eg. 1.1, 1.2, 9)"
+  class: String
+
+  """
+  `Modifier` of the `UN class` Accepted values for
+                      Class 3: - 1 (Flammable liquids) - 2 (Combustible liquids)
+                      Class 7: - F (Fissile) - 1 (Extremely low radiation levels) - 2 (Low radiation levels) - 3 (Higher radiation levels)
+                      
+  """
+  modifier: String
+
+  "UN number (eg. 3481)"
+  unNumber: Int
+}
+
+input ItemVariationComponentInput {
+  """
+  Value of `externalId` of the component `Item Variation`.
+                      
+  """
+  componentExternalId: String!
+
+  """
+  Number of given `Item Variation` as a component.
+                      
+  """
+  quantity: Int!
+}
+
+input StockInput {
+  warehouseExternalId: String!
+  quantity: Int!
+}
+
+input ItemTranslationInput {
+  """
+  Identifier of the `locale` Examples of valid values: `en`, `en_GB`, `en_US`
+                      
+  """
+  locale: String!
+
+  """
+  `Name` of the `Item`. Example: `T-shirt`
+                      
+  """
+  name: String!
+
+  """
+  `Description` of the `Item`. Example: `T-shirt`
+                      
+  """
+  description: String
+}
+
+input ItemFlagsInput {
+  """
+  A flag indicating that `Item` (or `SalesOrderItem`) consists of multiple pieces and is shipped with several `SalesOrderParcels`. Setting this to `TRUE` will allow you to set, for example, `SalesOrderItem.quantity` to `1` and then indicate quantity in several `SalesOrderParcels` using `SalesOrderParcel.quantity` which in total is larger than `1`. Leaving this as `FALSE` will required the total quantity sent in `SalesOrderParcel.quantity` be less or equal to `SalesOrderItem.quantity`.
+                      
+  """
+  isMultiParcelItem: Boolean
+
+  """
+  A flag indicating that `Item` (or `SalesOrderItem`) is bulky.
+                      
+  """
+  isBulky: Boolean
+}
+
+"""
+Model of `Item` for **update**.
+            
+"""
+input ItemUpdateInput {
+  """
+  Id of the `Item` in the system using the API. Used to identify items via API when querying or updating them.
+                      
+  """
+  externalId: String!
+
+  """
+  Value identifying the external version of the entity.
+                      
+  """
+  externalVersion: String
+
+  """
+  An array of `externalId's` of the Categories this `Item` belongs to. Example: `["99", "100"]`.
+                      
+  """
+  categories: [String]
+
+  """
+  An array of `Item Variations`.
+                      
+  """
+  variations: [ItemVariationUpdateInput]
+
+  """
+  An array of `Item Translations`.
+                      
+  """
+  translations: [ItemTranslationUpdateInput]
+
+  """
+  An array of `BusinessParameterInput` objects
+                      
+  """
+  businessParameters: [BusinessParameterInput]
+
+  """
+  A subset of different `Item` flags.
+                      
+  """
+  flags: ItemFlagsInput
+
+  """
+  Pass `true` to delete the object
+                      
+  """
+  delete: Boolean
+}
+
+"""
+Model of `ItemVariation` for **update**.
+            
+"""
+input ItemVariationUpdateInput {
+  """
+  Type of the `Item Variation`.
+                      
+  """
+  type: ItemTypeEnum
+
+  """
+  `Id` of the `Item Variation` in the system using the API. Used to identify `Item variations` via API when querying or updating them.
+                      
+  """
+  externalId: String!
+
+  """
+  Value identifying the external version of the entity.
+                      
+  """
+  externalVersion: String
+
+  """
+  `EAN` of the `Item Variation`.
+                      
+  """
+  ean: String
+
+  """
+  `SKU` value of the Item Variation.
+                      
+  """
+  sku: String
+
+  """
+  `Price` of the Item Variation.
+                      
+  """
+  price: Float
+
+  """
+  `Currency` of the Item Variation price in `ISO 4217` format. Example: `EUR`.
+                      
+  """
+  currency: String
+
+  """
+  `Weight` of the Item Variation in kilograms
+                      
+  """
+  weight: Float
+
+  """
+  `Width` of the Item Variation in centimeters.
+                      
+  """
+  width: Float
+
+  """
+  `Length` of the Item Variation in centimeters.
+                      
+  """
+  length: Float
+
+  """
+  `Height` of the Item Variation in centimeters.
+                      
+  """
+  height: Float
+
+  """
+  `URL` of the Item Variation `Image`.
+                      
+  """
+  image: String
+
+  """
+  An array of `Item Attributes`.
+                      
+  """
+  attributes: [ItemAttributeInput]
+  itemCustoms: ItemCustomsInput
+
+  """
+  An array of `BusinessParameterInput` objects
+                      
+  """
+  businessParameters: [BusinessParameterInput]
+
+  """
+  Pass `true` to delete the object
+                      
+  """
+  delete: Boolean
+
+  """
+  Hazardous Materials info entries
+                      
+  """
+  hazmatData: [HazmatEntryInput!]
+
+  """
+  An array of `Item Variation Components`.
+                      
+  """
+  components: [ItemVariationComponentUpdateInput]
+
+  """
+  Stock information.
+                      
+  """
+  stock: [StockInput!]
+}
+
+input ItemVariationComponentUpdateInput {
+  """
+  Value of `externalId` of the component `Item Variation`.
+                      
+  """
+  componentExternalId: String!
+
+  """
+  Number of given `Item Variation` as a component.
+                      
+  """
+  quantity: Int
+
+  """
+  Pass `true` to delete the object
+                      
+  """
+  delete: Boolean
+}
+
+input ItemTranslationUpdateInput {
+  """
+  Identifier of the `locale` Examples of valid values: `en`, `en_GB`, `en_US`
+                      
+  """
+  locale: String!
+
+  """
+  `Name` of the `Item`. Example: `T-shirt`
+                      
+  """
+  name: String
+
+  """
+  `Description` of the `Item`. Example: `T-shirt`
+                      
+  """
+  description: String
+}
+
+input SalesOrderInput {
+  """
+  Key of the Sales Channel to operate with.
+                      
+                      > **INFO:** Look for the `salesChannelKey` value in the application under **Return Portal > Sales Channels > Channel key**.
+                      
+                      If `salesChannelKey` isn't provided, Sales Order will be imported into the **default Sales Channel** set in the application!
+                      
+  """
+  salesChannelKey: String
+
+  """
+  `Id` of the `Sales Order` in the system using the API. Used to identify `Sales Order` via API when querying or updating them.
+                      
+  """
+  externalId: String!
+
+  """
+  Value identifying the external version of the entity.
+                      
+  """
+  externalVersion: String
+
+  """
+  Original `Number` of the Sales Order.
+                      
+  """
+  number: String!
+
+  """
+  `Id` of the `Sales Order` in the source system, which was imported in the system using the API.
+                      
+  """
+  sourceExternalId: String
+
+  """
+  `Number` of the Sales Order in the source system where it originated from.
+                      
+  """
+  sourceNumber: String
+
+  """
+  `Date` when the Sales Order was originally created.
+                      
+  """
+  orderDate: DateTime!
+
+  """
+  `Status` of the Sales Order. `SalesOrderStatusEnum` enum.
+                      **Will be calculated automatically from Sales Order Parcel statuses, if left empty!**
+                      
+  """
+  status: SalesOrderStatusEnum
+
+  """
+  An array of `Sale Order Items`. Representing all `Items` of the Sales Order.
+                      
+  """
+  items: [SalesOrderItemInput!]!
+
+  """
+  An array of `Sales Order Parcels`. Representing all `Parcels` of the Sales Order.
+                      
+  """
+  parcels: [SalesOrderParcelInput!]
+
+  """
+  `Shipping address` object
+                      
+  """
+  shippingAddress: AddressInput
+
+  """
+  `Shipping address` entity object, representing the receiver of the Sales Order.
+                      
+  """
+  shippingEntity: EntityInput
+
+  """
+  `Billing address` object
+                      
+  """
+  billingAddress: AddressInput
+
+  """
+  `Shipping address` entity object, representing the payer for the Sales Order.
+                      
+  """
+  billingEntity: EntityInput
+
+  """
+  `Consumer` entity object, representing the **Consumer** this Sales Order will be referenced with.
+                      
+  """
+  consumer: ConsumerInput
+
+  """
+  `Total price` of the Sales Order.
+                      
+  """
+  total: Float!
+
+  """
+  `Currency` of the Sales Order in `ISO 4217` format. Example: `EUR`.
+                      
+  """
+  currency: String!
+
+  """
+  `Language` (locale) used during the creation of the original Sales Order. May be used to determine the communication language with the Consumer. Examples of valid values: `en`, `en_GB`, `en_US`
+                      
+  """
+  locale: String
+
+  """
+  `Payment type` of the Sales Order. Free text value. Examples: `VISA`, `Paypal`, `Cash`
+                      
+  """
+  paymentType: String
+
+  """
+  An array of `BusinessParameterInput` objects
+                      
+  """
+  businessParameters: [BusinessParameterInput]
+  tags: [String]
+
+  """
+  Total `Shipping Costs` of the SalesOrder.
+                      
+  """
+  shippingCosts: Float
+}
+
+input SalesOrderItemInput {
+  """
+  Type of the `Sales Order Item`.
+                      
+  """
+  type: ItemTypeEnum
+
+  """
+  Value of `externalId` of the parent `Sales Order Item`.
+                      
+  """
+  parentExternalId: String
+
+  """
+  Id of the `Sales Order Item` in the system using the API. Used to identify Sales Order Items via API when querying, updating or referring to them.
+                      
+  """
+  externalId: String!
+
+  """
+  Value identifying the external version of the entity.
+                      
+  """
+  externalVersion: String
+
+  """
+  Id of the `Item Variation` in the system using the API. If not provided, the SKU will be used to find the corresponding `Item Variation`.
+                      
+  """
+  itemVariationExternalId: String
+
+  """
+  `Id` of the `Subcustomer/Retailer` in the system using the API delivering the goods to the Consumer. Indicates to whom the goods should be returned to.
+                      
+  """
+  subcustomerExternalId: String
+  sku: String
+  ean: String
+
+  """
+  Total `Quantity` of the Item within the Sales Order.
+                      
+  """
+  quantity: Float!
+  price: Float!
+
+  """
+  Array of Sales Order Parcels containing the Item.
+                      
+  """
+  parcels: [SalesOrderParcelItemInput!]
+
+  """
+  An array of `Item Translations`.
+                      
+  """
+  translations: [ItemTranslationInput!]
+  itemCustoms: ItemCustomsInput
+
+  """
+  An array of `BusinessParameterInput` objects.
+                      
+  """
+  businessParameters: [BusinessParameterInput!]
+
+  """
+  A subset of different `SalesOrderItem` flags.
+                      
+  """
+  flags: ItemFlagsInput
+
+  """
+  Hazardous Materials info entries
+                      
+  """
+  hazmatData: [HazmatEntryInput!]
+
+  """
+  `Date` when the warranty ends.
+                      
+  """
+  warrantyUntilDate: Date
+
+  """
+  `URL` of the `Image`.
+                      
+  """
+  image: String
+
+  """
+  A flag indicating whether to copy the `image` and `ItemTranslation` `name` from the `ItemVariation` if mentioned attributes are not provided explicitly.
+                      
+  """
+  copyItemVariationMetadata: Boolean
+
+  """
+  Freebie conditions for the Sales Order Item
+                      
+  """
+  freebieConditions: [FreebieConditionInput]
+}
+
+input SalesOrderParcelItemInput {
+  """
+  `External ID` of the `Sales Order Parcel` this `Item` is in
+                      
+  """
+  externalId: String!
+
+  """
+  `Quantity` of the Item inside the Parcel
+                      
+  """
+  quantity: Float!
+}
+
+"Input for the freebie condition of the Sales Order Item"
+input FreebieConditionInput {
+  condition: FreebieConditionEnum!
+
+  """
+  Used for `minimum_order_value` freebie condition
+                      
+  """
+  minimumValue: Float
+
+  """
+  `ExternalIds` of the Sales Order Items. Used for `has_any_items` & `has_all_items` freebie condition
+                      
+  """
+  itemsList: [String]
+}
+
+"Chosen Sales Order Item freebie condition"
+enum FreebieConditionEnum {
+  "Sales Order must be at least of this value"
+  minimum_order_value
+
+  "Sales Order includes any of these Items"
+  has_any_item
+
+  "Sales Order includes all of these Items"
+  has_all_items
+}
+
+input SalesOrderParcelInput {
+  """
+  `Id` of the `Sales Order Parcel` in the system using the API. Used to identify `Sales Order Parcel` via API when querying or updating them.
+                      
+  """
+  externalId: String!
+
+  """
+  Value identifying the external version of the entity.
+                      
+  """
+  externalVersion: String
+
+  """
+  `Id` of the `Subcustomer/Retailer` in the system using the API delivering the goods to the Consumer. Indicates to whom the goods should be returned to.
+                      
+  """
+  subcustomerExternalId: String
+
+  """
+  `Id` of the `Warehouse` in the system using the API. Indicates where the goods should be returned to.
+                      
+                      > **!IMPORTANT**: Please, note that some carrier have the `Warehouse` hard-tied to the `CarrierContract`,
+                      therefore setting this to a `Warehouse` not assigned to the `CarrierContract` will have no effect!
+                      
+  """
+  warehouseExternalId: String
+
+  """
+  Reference value in the system using the API e.g. invoice number, order number etc.
+                      
+  """
+  reference: String
+
+  """
+  `Status` of the Parcel.
+                      
+  """
+  status: SalesOrderStatusEnum!
+
+  """
+  `Tracking number` of the Parcel, issued by the Carrier.
+                      
+  """
+  trackingNumber: String
+
+  """
+  `Number` of the Parcel, issued by the Carrier.
+                      
+  """
+  carrierParcelNumber: String
+
+  """
+  Name of the `Carrier`.
+                      
+                      > **!IMPORTANT**: Make sure the *Carrier mapping* has been configured in the application under **Return Portal > Sales Channels > Carrier Mapping**
+                      section before using this feature, as Carrier resolving procedure by the name of the Carrier will be **performed only once, during the Sales Order import**!.
+                      
+  """
+  carrier: String
+
+  """
+  `Date and Time` of shipping, if known.
+                      
+  """
+  shippedAt: DateTime
+
+  """
+  `Date and Time` of delivery, if known.
+                      
+  """
+  deliveredAt: DateTime
+
+  """
+  in kilograms
+                      
+  """
+  weight: Float
+
+  """
+  in centimeters
+                      
+  """
+  width: Float
+
+  """
+  in centimeters
+                      
+  """
+  length: Float
+
+  """
+  in centimeters
+                      
+  """
+  height: Float
+
+  """
+  An array of `BusinessParameterInput` objects
+                      
+  """
+  businessParameters: [BusinessParameterInput]
+
+  """
+  Array of `ParcelReferenceInput` objects for this parcel
+                      
+  """
+  parcelReferences: [ParcelReferenceInput]
+}
+
+input ParcelReferenceInput {
+  """
+  `Id` of the `Parcel Reference` in the system using the API. Used to identify `Parcel References` via API when querying, updating or referencing them.
+                      
+  """
+  name: String!
+
+  """
+  Value identifying the external version of the entity.
+                      
+  """
+  value: String!
+}
+
+input ConsumerInput {
+  """
+  `Id` of the `Consumer` in the system using the API. Used to identify `Consumer` via API when querying or updating them.
+                      
+  """
+  externalId: String!
+
+  """
+  Value identifying the external version of the entity.
+                      
+  """
+  externalVersion: String
+
+  """
+  `First name` of the Consumer.
+                      
+  """
+  firstName: String!
+
+  """
+  `Last name` of the Consumer.
+                      
+  """
+  lastName: String!
+
+  """
+  `E-mail` address of the Consumer.
+                      
+  """
+  email: String
+  tags: [String]
+
+  """
+  An array of `BusinessParameterInput` objects
+                      
+  """
+  businessParameters: [BusinessParameterInput]
+}
+
+input SalesOrderUpdateInput {
+  """
+  Key of the Sales Channel to operate with.
+                      
+                      > **INFO:** Look for the `salesChannelKey` value in the application under **Return Portal > Sales Channels > Channel key**.
+                      
+                      If `salesChannelKey` isn't provided, Sales Order will be imported into the **default Sales Channel** set in the application!
+                      
+  """
+  salesChannelKey: String
+
+  """
+  `Id` of the `Sales Order` in the system using the API. Used to identify `Sales Order` via API when querying or updating them.
+                      
+  """
+  externalId: String!
+
+  """
+  Value identifying the external version of the entity.
+                      
+  """
+  externalVersion: String
+
+  """
+  Original `Number` of the Sales Order.
+                      
+  """
+  number: String
+
+  """
+  `Id` of the `Sales Order` in the source system, which was imported in the system using the API.
+                      
+  """
+  sourceExternalId: String
+
+  """
+  `Number` of the Sales Order in the source system where it originated from.
+                      
+  """
+  sourceNumber: String
+
+  """
+  `Date` when the Sales Order was originally created.
+                      
+  """
+  orderDate: DateTime
+
+  """
+  `Status` of the Sales Order. `SalesOrderStatusEnum` enum.
+                      **Will be calculated automatically from Sales Order Parcel statuses, if left empty!**
+                      
+  """
+  status: SalesOrderStatusEnum
+
+  """
+  An array of `Sale Order Items`. Representing all `Items` of the Sales Order.
+                      
+  """
+  items: [SalesOrderItemUpdateInput]
+
+  """
+  An array of `Sales Order Parcels`. Representing all `Parcels` of the Sales Order.
+                      
+  """
+  parcels: [SalesOrderParcelUpdateInput]
+
+  """
+  `Shipping address` object
+                      
+  """
+  shippingAddress: AddressInput
+
+  """
+  `Shipping address` entity object, representing the receiver of the Sales Order.
+                      
+  """
+  shippingEntity: EntityInput
+
+  """
+  `Billing address` object
+                      
+  """
+  billingAddress: AddressInput
+
+  """
+  `Shipping address` entity object, representing the payer for the Sales Order.
+                      
+  """
+  billingEntity: EntityInput
+
+  """
+  `Consumer` entity object, representing the **Consumer** this Sales Order will be referenced with.
+                      
+  """
+  consumer: ConsumerInput
+
+  """
+  `Total price` of the Sales Order.
+                      
+  """
+  total: Float
+
+  """
+  `Currency` of the Sales Order in `ISO 4217` format. Example: `EUR`.
+                      
+  """
+  currency: String
+
+  """
+  `Language` (locale) used during the creation of the original Sales Order. May be used to determine the communication language with the Consumer. Examples of valid values: `en`, `en_GB`, `en_US`
+                      
+  """
+  locale: String
+
+  """
+  `Payment type` of the Sales Order. Free text value. Examples: `VISA`, `Paypal`, `Cash`
+                      
+  """
+  paymentType: String
+
+  """
+  An array of `BusinessParameterInput` objects
+                      
+  """
+  businessParameters: [BusinessParameterInput]
+  tags: [String]
+
+  """
+  Pass `true` to delete the object
+                      
+  """
+  delete: Boolean
+
+  """
+  Total `Shipping Costs` of the SalesOrder.
+                      
+  """
+  shippingCosts: Float
+}
+
+input SalesOrderItemUpdateInput {
+  """
+  Type of the `Sales Order Item`.
+                      
+  """
+  type: ItemTypeEnum
+
+  """
+  Value of `externalId` of the parent `Sales Order Item`.
+                      
+  """
+  parentExternalId: String
+
+  """
+  Id of the `Sales Order Item` in the system using the API. Used to identify Sales Order Items via API when querying, updating or referring to them.
+                      
+  """
+  externalId: String!
+
+  """
+  Value identifying the external version of the entity.
+                      
+  """
+  externalVersion: String
+
+  """
+  Id of the `Item Variation` in the system using the API. If not provided, the SKU will be used to find the corresponding `Item Variation`.
+                      
+  """
+  itemVariationExternalId: String
+
+  """
+  `Id` of the `Subcustomer/Retailer` in the system using the API delivering the goods to the Consumer. Indicates to whom the goods should be returned to.
+                      
+  """
+  subcustomerExternalId: String
+  sku: String
+  ean: String
+
+  """
+  Total `Quantity` of the Item within the Sales Order.
+                      
+  """
+  quantity: Float
+  price: Float
+
+  """
+  Array of Sales Order Parcels containing the Item.
+                      
+  """
+  parcels: [SalesOrderParcelItemInput!]
+
+  """
+  An array of `Item Translations`.
+                      
+  """
+  translations: [ItemTranslationInput!]
+  itemCustoms: ItemCustomsInput
+
+  """
+  An array of `BusinessParameterInput` objects.
+                      
+  """
+  businessParameters: [BusinessParameterInput!]
+
+  """
+  A subset of different `SalesOrderItem` flags.
+                      
+  """
+  flags: ItemFlagsInput
+
+  """
+  Hazardous Materials info entries
+                      
+  """
+  hazmatData: [HazmatEntryInput!]
+
+  """
+  `Date` when the warranty ends.
+                      
+  """
+  warrantyUntilDate: Date
+
+  """
+  `URL` of the `Image`.
+                      
+  """
+  image: String
+
+  """
+  A flag indicating whether to copy the `image` and `ItemTranslation` `name` from the `ItemVariation` if mentioned attributes are not provided explicitly.
+                      
+  """
+  copyItemVariationMetadata: Boolean
+
+  """
+  Freebie conditions for the Sales Order Item
+                      
+  """
+  freebieConditions: [FreebieConditionInput]
+
+  """
+  Pass `true` to delete the object
+                      
+  """
+  delete: Boolean
+}
+
+input SalesOrderParcelUpdateInput {
+  """
+  `Id` of the `Sales Order Parcel` in the system using the API. Used to identify `Sales Order Parcel` via API when querying or updating them.
+                      
+  """
+  externalId: String!
+
+  """
+  Value identifying the external version of the entity.
+                      
+  """
+  externalVersion: String
+
+  """
+  `Id` of the `Subcustomer/Retailer` in the system using the API delivering the goods to the Consumer. Indicates to whom the goods should be returned to.
+                      
+  """
+  subcustomerExternalId: String
+
+  """
+  `Id` of the `Warehouse` in the system using the API. Indicates where the goods should be returned to.
+                      
+                      > **!IMPORTANT**: Please, note that some carrier have the `Warehouse` hard-tied to the `CarrierContract`,
+                      therefore setting this to a `Warehouse` not assigned to the `CarrierContract` will have no effect!
+                      
+  """
+  warehouseExternalId: String
+
+  """
+  Reference value in the system using the API e.g. invoice number, order number etc.
+                      
+  """
+  reference: String
+
+  """
+  `Status` of the Parcel.
+                      
+  """
+  status: SalesOrderStatusEnum
+
+  """
+  `Tracking number` of the Parcel, issued by the Carrier.
+                      
+  """
+  trackingNumber: String
+
+  """
+  `Number` of the Parcel, issued by the Carrier.
+                      
+  """
+  carrierParcelNumber: String
+
+  """
+  Name of the `Carrier`.
+                      
+                      > **!IMPORTANT**: Make sure the *Carrier mapping* has been configured in the application under **Return Portal > Sales Channels > Carrier Mapping**
+                      section before using this feature, as Carrier resolving procedure by the name of the Carrier will be **performed only once, during the Sales Order import**!.
+                      
+  """
+  carrier: String
+
+  """
+  `Date and Time` of shipping, if known.
+                      
+  """
+  shippedAt: DateTime
+
+  """
+  `Date and Time` of delivery, if known.
+                      
+  """
+  deliveredAt: DateTime
+
+  """
+  in kilograms
+                      
+  """
+  weight: Float
+
+  """
+  in centimeters
+                      
+  """
+  width: Float
+
+  """
+  in centimeters
+                      
+  """
+  length: Float
+
+  """
+  in centimeters
+                      
+  """
+  height: Float
+
+  """
+  An array of `BusinessParameterInput` objects
+                      
+  """
+  businessParameters: [BusinessParameterInput]
+
+  """
+  Pass `true` to delete the object
+                      
+  """
+  delete: Boolean
+
+  """
+  Array of `ParcelReferenceInput` objects for this parcel
+                      
+  """
+  parcelReferences: [ParcelReferenceInput]
+}
+
+input ReturnOrderUpdateInput {
+  """
+  `Unique ID` of the Return Order
+                      
+  """
+  uuid: String!
+  externalId: String
+
+  """
+  An array of `Return Order Parcels`
+                      
+  """
+  parcels: [ReturnOrderParcelUpdateInput!]
+}
+
+input ReturnOrderParcelUpdateInput {
+  """
+  `Unique ID` of the Return Order Parcel
+                      
+  """
+  uuid: String
+
+  """
+  `Tracking Number` of the Return Order Parcel
+                      
+  """
+  trackingNumber: String
+
+  """
+  `status` of the Return Order Parcel
+                      
+  """
+  status: ReturnOrderParcelStatusUpdateEnum
+
+  """
+  Datetime when the `ReturnOrderParcel` was delivered to the Warehouse
+                      
+  """
+  deliveredAt: DateTime
+  businessParameters: [BusinessParameterInput]
+
+  """
+  Array of `ParcelReferenceInput` objects for this parcel
+                      
+  """
+  parcelReferences: [ParcelReferenceInput]
+}
+
+enum ReturnOrderParcelStatusUpdateEnum {
+  "Return Order Parcel has been delivered to the Warehouse"
+  warehouse
+
+  "Return Order Parcel has been processed by the Warehouse"
+  processed
+}
+
+input SubcustomerInput {
+  """
+  `Id` of the `Subcustomer` in the system using the API. Used to identify `Subcustomers` via API when querying, updating or referencing them.
+                      
+  """
+  externalId: String!
+
+  """
+  Value identifying the external version of the entity.
+                      
+  """
+  externalVersion: String
+
+  """
+  `Display name` of the `Subcustomer`
+                      
+  """
+  name: String!
+
+  """
+  `Legal address` of the `Subcustomer`
+                      
+  """
+  legalAddress: AddressInput
+
+  """
+  `Legal information` of the `Subcustomer`
+                      
+  """
+  legalEntity: EntityInput
+}
+
+input SubcustomerUpdateInput {
+  """
+  `Id` of the `Subcustomer` in the system using the API. Used to identify `Subcustomers` via API when querying, updating or referencing them.
+                      
+  """
+  externalId: String!
+
+  """
+  Value identifying the external version of the entity.
+                      
+  """
+  externalVersion: String
+
+  """
+  `Display name` of the `Subcustomer`
+                      
+  """
+  name: String
+
+  """
+  `Legal address` of the `Subcustomer`
+                      
+  """
+  legalAddress: AddressInput
+
+  """
+  `Legal information` of the `Subcustomer`
+                      
+  """
+  legalEntity: EntityInput
+
+  """
+  Pass `true` to delete the object
+                      
+  """
+  delete: Boolean
+}
+
+input CarrierContractInput {
+  """
+  `Id` of the `CarrierContract` in the system using the API. Used to identify `CarrierContracts` via API when querying, updating or referencing them.
+                      
+  """
+  externalId: String!
+
+  """
+  Value identifying the external version of the entity.
+                      
+  """
+  externalVersion: String
+
+  """
+  `Id` of the parent `CarrierContract` in the system using the API.
+                      
+  """
+  parentExternalId: String!
+
+  """
+  `Id` of the `Subcustomer` in the system using the API.
+                      
+  """
+  subcustomerExternalId: String
+
+  """
+  `Display name` of the `CarrierContract`
+                      
+  """
+  name: String!
+
+  """
+  `Carrier` of the `CarrierContract`
+                      
+  """
+  carrier: String!
+
+  """
+  Indicates if the `shipping` feature should be enabled for this `CarrierContract`
+                      
+  """
+  hasShipping: Boolean!
+  shippingConfiguration: CarrierModuleConfigurationInput
+
+  """
+  Indicates if the `tracking` feature should be enabled for this `CarrierContract`
+                      
+  """
+  hasTracking: Boolean!
+  trackingConfiguration: CarrierModuleConfigurationInput
+
+  """
+  Indicates if the `location` feature should be enabled for this `CarrierContract`. TODO: give a better explanation for this feature
+                      
+  """
+  hasLocation: Boolean!
+  locationConfiguration: CarrierModuleConfigurationInput
+
+  """
+  Indicates if the `outbound` shipments should be tracked or not.
+                      
+  """
+  trackOutbound: Boolean!
+
+  """
+  Indicates if the `return` shipments should be tracked or not.
+                      
+  """
+  trackReturns: Boolean!
+
+  """
+  Indicates if the `potential` shipments should be tracked or not.
+                      
+  """
+  trackPotentialReturns: Boolean!
+}
+
+input CarrierModuleConfigurationInput {
+  """
+  Carrier module configuration as JSON string
+                      
+  """
+  configuration: JsonObject
+}
+
+input CarrierContractUpdateInput {
+  """
+  `Id` of the `CarrierContract` in the system using the API. Used to identify `CarrierContracts` via API when querying, updating or referencing them.
+                      
+  """
+  externalId: String!
+
+  """
+  Value identifying the external version of the entity.
+                      
+  """
+  externalVersion: String
+
+  """
+  `Id` of the parent `CarrierContract` in the system using the API.
+                      
+  """
+  parentExternalId: String
+
+  """
+  `Id` of the `Subcustomer` in the system using the API.
+                      
+  """
+  subcustomerExternalId: String
+
+  """
+  `Display name` of the `CarrierContract`
+                      
+  """
+  name: String
+
+  """
+  `Carrier` of the `CarrierContract`
+                      
+  """
+  carrier: String
+
+  """
+  Indicates if the `shipping` feature should be enabled for this `CarrierContract`
+                      
+  """
+  hasShipping: Boolean
+  shippingConfiguration: CarrierModuleConfigurationInput
+
+  """
+  Indicates if the `tracking` feature should be enabled for this `CarrierContract`
+                      
+  """
+  hasTracking: Boolean
+  trackingConfiguration: CarrierModuleConfigurationInput
+
+  """
+  Indicates if the `location` feature should be enabled for this `CarrierContract`. TODO: give a better explanation for this feature
+                      
+  """
+  hasLocation: Boolean
+  locationConfiguration: CarrierModuleConfigurationInput
+
+  """
+  Indicates if the `outbound` shipments should be tracked or not.
+                      
+  """
+  trackOutbound: Boolean
+
+  """
+  Indicates if the `return` shipments should be tracked or not.
+                      
+  """
+  trackReturns: Boolean
+
+  """
+  Indicates if the `potential` shipments should be tracked or not.
+                      
+  """
+  trackPotentialReturns: Boolean
+
+  """
+  Pass `true` to delete the object
+                      
+  """
+  delete: Boolean
+}
+
+type ReturnLabel {
+  carrierTransactionId: String
+  carrierReferenceNumber: String
+  trackingNumber: String
+  carrierParcelNumber: String
+
+  "Base64 encoded string containing PDF"
+  label: String
+}
+
+input SalesOrderBouncedInput {
+  """
+  `Id` of the `Sales Order` in the system using the API. Used to identify `Sales Order` via API when querying or updating them.
+                      
+  """
+  externalId: String!
+
+  """
+  `Status` of the Sales Order. `SalesOrderStatusEnum` enum.
+                      **Will be calculated automatically from Sales Order Parcel statuses, if left empty!**
+                      
+  """
+  status: ReturnOrderStatusEnum
+
+  """
+  `Tracking number` of the Parcel, issued by the Carrier.
+                      
+  """
+  trackingNumber: String
+
+  """
+  Array of `Items`
+                      
+  """
+  items: [SalesOrderItemBouncedInput!]!
+}
+
+input SalesOrderItemBouncedInput {
+  sku: String!
+  quantity: Float!
+  returnReasonExternalId: String
+  action: ReturnAction
+  businessParameters: [BusinessParameterInput]
+}
